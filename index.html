@@ -1,851 +1,835 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.5">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyectos I&D – Grupo Comeca</title>
+<style>
+:root {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --surface2: #f9f8f5;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.16);
+  --text: #1a1917;
+  --muted: #6e6d68;
+  --hint: #a09f99;
+  --blue: #185FA5; --blue-bg: #E6F1FB; --blue-txt: #0C447C;
+  --green: #3B6D11; --green-bg: #EAF3DE; --green-txt: #27500A;
+  --amber: #854F0B; --amber-bg: #FAEEDA; --amber-txt: #633806;
+  --red: #A32D2D; --red-bg: #FCEBEB; --red-txt: #791F1F;
+  --gray-bg: #F1EFE8; --gray-txt: #444441;
+  --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-txt: #085041;
+  --r: 8px; --r2: 5px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#1b1b19;--surface:#242421;--surface2:#2c2c29;
+    --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.17);
+    --text:#e6e4dc;--muted:#9e9d97;--hint:#6a6965;
+    --blue:#378ADD;--blue-bg:#0c2a45;--blue-txt:#B5D4F4;
+    --green:#639922;--green-bg:#17340a;--green-txt:#C0DD97;
+    --amber:#BA7517;--amber-bg:#33200a;--amber-txt:#FAC775;
+    --red:#E24B4A;--red-bg:#2c1212;--red-txt:#F7C1C1;
+    --gray-bg:#2c2c2a;--gray-txt:#D3D1C7;
+    --teal:#1D9E75;--teal-bg:#04251c;--teal-txt:#9FE1CB;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);}
+.login-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:40px;width:340px;text-align:center;}
+.login-card .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:3px 8px;border-radius:3px;letter-spacing:.05em;display:inline-block;margin-bottom:20px;}
+.login-card h2{font-size:16px;font-weight:500;margin-bottom:6px;}
+.login-card p{font-size:12px;color:var(--muted);margin-bottom:28px;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;font-size:13px;font-weight:500;}
+.btn-google:hover{background:var(--bg);}
+.btn-google img{width:18px;height:18px;}
+.login-error{font-size:11px;color:var(--red-txt);margin-top:12px;}
+
+/* APP */
+#app{display:none;}
+#app.visible{display:grid;grid-template-columns:220px 1fr;grid-template-rows:48px 1fr;height:100vh;overflow:hidden;}
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:0.5px solid var(--border2);display:flex;align-items:center;padding:0 18px;gap:14px;}
+.topbar .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:2px 7px;border-radius:3px;letter-spacing:.05em;}
+.topbar h1{font-size:14px;font-weight:500;}
+.topbar .spacer{flex:1;}
+.topbar .user-info{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.topbar .user-info img{width:22px;height:22px;border-radius:50%;}
+
+.sidebar{background:var(--surface);border-right:0.5px solid var(--border);overflow-y:auto;padding:10px 0;}
+.sidebar-section{padding:4px 12px;font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-top:10px;margin-bottom:2px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--muted);transition:background .12s,color .12s;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--bg);color:var(--text);font-weight:500;border-left:2px solid var(--text);}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--amber-bg);color:var(--amber-txt);padding:1px 6px;border-radius:10px;}
+.nav-logout{margin-top:auto;border-top:0.5px solid var(--border);padding-top:8px;margin-top:12px;}
+
+.main{overflow-y:auto;padding:20px 24px;}
+.view{display:none;} .view.active{display:block;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;}
+.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
+.kpi-val{font-size:28px;font-weight:500;line-height:1;}
+.kpi-sub{font-size:10px;color:var(--hint);margin-top:3px;}
+.kpi.blue{border-left:3px solid var(--blue);}
+.kpi.green{border-left:3px solid var(--green);}
+.kpi.amber{border-left:3px solid var(--amber);}
+.kpi.red{border-left:3px solid var(--red);}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:14px;}
+.card-head{padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;}
+.card-head h2{font-size:13px;font-weight:500;flex:1;}
+
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-head h2{font-size:15px;font-weight:500;}
+
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:6px 12px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;}
+.btn:hover{background:var(--bg);}
+.btn.primary{background:var(--text);color:var(--surface);border-color:var(--text);}
+.btn.primary:hover{opacity:.85;}
+.btn.sm{padding:3px 8px;font-size:11px;}
+.btn.ghost{border:none;background:none;color:var(--muted);padding:3px 6px;}
+.btn.ghost:hover{background:var(--bg);color:var(--text);}
+
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;white-space:nowrap;}
+.badge.blue{background:var(--blue-bg);color:var(--blue-txt);}
+.badge.green{background:var(--green-bg);color:var(--green-txt);}
+.badge.amber{background:var(--amber-bg);color:var(--amber-txt);}
+.badge.red{background:var(--red-bg);color:var(--red-txt);}
+.badge.gray{background:var(--gray-bg);color:var(--gray-txt);}
+.badge.teal{background:var(--teal-bg);color:var(--teal-txt);}
+
+.proj-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;}
+.proj-row:last-child{border-bottom:none;}
+.proj-row:hover{background:var(--surface2);}
+.proj-num{font-size:10px;color:var(--hint);width:20px;flex-shrink:0;text-align:right;}
+.proj-info{flex:1;min-width:0;}
+.proj-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proj-meta{font-size:10px;color:var(--muted);margin-top:1px;}
+.proj-progress{width:80px;flex-shrink:0;}
+.prog-bg{height:4px;background:var(--border2);border-radius:2px;margin-top:3px;}
+.prog-fill{height:100%;border-radius:2px;}
+
+.back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;}
+.back:hover{color:var(--text);}
+.detail-panel{display:none;} .detail-panel.open{display:block;}
+
+.action-tree{padding:12px 14px;}
+.action-node{margin-bottom:4px;}
+.action-row{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:var(--r2);border:0.5px solid var(--border);background:var(--surface2);position:relative;}
+.action-indent{padding-left:22px;border-left:1.5px solid var(--border2);margin-left:12px;margin-top:3px;}
+.action-toggle{background:none;border:none;cursor:pointer;color:var(--muted);padding:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:12px;}
+.action-check{width:14px;height:14px;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--green);}
+.action-content{flex:1;min-width:0;}
+.action-text{font-size:12px;line-height:1.4;}
+.action-text.done{text-decoration:line-through;color:var(--hint);}
+.action-dates{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;}
+.action-date-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:1px 6px;border-radius:3px;background:var(--bg);color:var(--muted);border:0.5px solid var(--border2);}
+.action-date-tag.overdue{background:var(--red-bg);color:var(--red-txt);border-color:var(--red);}
+.action-date-tag.soon{background:var(--amber-bg);color:var(--amber-txt);border-color:var(--amber);}
+.action-row-btns{display:flex;gap:2px;flex-shrink:0;}
+
+.add-action-row{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:4px;}
+.add-action-input{flex:1;font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);}
+.add-action-input:focus{outline:none;border-color:var(--blue);}
+.add-action-date{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:130px;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--r);width:480px;max-width:96vw;max-height:88vh;overflow-y:auto;border:0.5px solid var(--border2);}
+.modal-head{padding:14px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:14px;font-weight:500;}
+.modal-body{padding:18px;display:flex;flex-direction:column;gap:12px;}
+.modal-foot{padding:12px 18px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+.field input,.field select,.field textarea{font-size:12px;padding:7px 9px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:60px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.flt{font-size:11px;padding:3px 10px;border:0.5px solid var(--border2);border-radius:20px;background:var(--surface);color:var(--muted);cursor:pointer;}
+.flt.on{background:var(--text);color:var(--surface);border-color:var(--text);}
+
+.overdue-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:0.5px solid var(--border);}
+.overdue-item:last-child{border-bottom:none;}
+.empty{text-align:center;padding:32px;color:var(--hint);font-size:12px;}
+.prog-wrap{width:100%;}
+.prog-label{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;}
+
+.saving-indicator{position:fixed;bottom:16px;right:16px;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 14px;font-size:11px;color:var(--muted);display:none;z-index:300;}
+.saving-indicator.show{display:block;}
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="es"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1">&lt;title&gt;Proyectos I&amp;D – Grupo Comeca&lt;/title&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">:root {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--bg: #f4f3ef;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--surface: #ffffff;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--surface2: #f9f8f5;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--border: rgba(0,0,0,0.09);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--border2: rgba(0,0,0,0.16);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--text: #1a1917;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--muted: #6e6d68;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--hint: #a09f99;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--blue: #185FA5; --blue-bg: #E6F1FB; --blue-txt: #0C447C;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--green: #3B6D11; --green-bg: #EAF3DE; --green-txt: #27500A;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--amber: #854F0B; --amber-bg: #FAEEDA; --amber-txt: #633806;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--red: #A32D2D; --red-bg: #FCEBEB; --red-txt: #791F1F;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--gray-bg: #F1EFE8; --gray-txt: #444441;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--teal: #0F6E56; --teal-bg: #E1F5EE; --teal-txt: #085041;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--r: 8px; --r2: 5px;</p>
-<p class="p1">}</p>
-<p class="p1">@media (prefers-color-scheme:dark){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>:root{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--bg:#1b1b19;--surface:#242421;--surface2:#2c2c29;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.17);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--text:#e6e4dc;--muted:#9e9d97;--hint:#6a6965;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--blue:#378ADD;--blue-bg:#0c2a45;--blue-txt:#B5D4F4;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--green:#639922;--green-bg:#17340a;--green-txt:#C0DD97;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--amber:#BA7517;--amber-bg:#33200a;--amber-txt:#FAC775;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--red:#E24B4A;--red-bg:#2c1212;--red-txt:#F7C1C1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--gray-bg:#2c2c2a;--gray-txt:#D3D1C7;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>--teal:#1D9E75;--teal-bg:#04251c;--teal-txt:#9FE1CB;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p1">*{box-sizing:border-box;margin:0;padding:0;}</p>
-<p class="p1">body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* LOGIN */</p>
-<p class="p1">#login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);}</p>
-<p class="p1">.login-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:40px;width:340px;text-align:center;}</p>
-<p class="p1">.login-card .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:3px 8px;border-radius:3px;letter-spacing:.05em;display:inline-block;margin-bottom:20px;}</p>
-<p class="p1">.login-card h2{font-size:16px;font-weight:500;margin-bottom:6px;}</p>
-<p class="p1">.login-card p{font-size:12px;color:var(--muted);margin-bottom:28px;}</p>
-<p class="p1">.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;font-size:13px;font-weight:500;}</p>
-<p class="p1">.btn-google:hover{background:var(--bg);}</p>
-<p class="p1">.btn-google img{width:18px;height:18px;}</p>
-<p class="p1">.login-error{font-size:11px;color:var(--red-txt);margin-top:12px;}</p>
-<p class="p2"><br></p>
-<p class="p1">/* APP */</p>
-<p class="p1">#app{display:none;}</p>
-<p class="p1">#app.visible{display:grid;grid-template-columns:220px 1fr;grid-template-rows:48px 1fr;height:100vh;overflow:hidden;}</p>
-<p class="p1">.topbar{grid-column:1/-1;background:var(--surface);border-bottom:0.5px solid var(--border2);display:flex;align-items:center;padding:0 18px;gap:14px;}</p>
-<p class="p1">.topbar .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:2px 7px;border-radius:3px;letter-spacing:.05em;}</p>
-<p class="p1">.topbar h1{font-size:14px;font-weight:500;}</p>
-<p class="p1">.topbar .spacer{flex:1;}</p>
-<p class="p1">.topbar .user-info{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}</p>
-<p class="p1">.topbar .user-info img{width:22px;height:22px;border-radius:50%;}</p>
-<p class="p2"><br></p>
-<p class="p1">.sidebar{background:var(--surface);border-right:0.5px solid var(--border);overflow-y:auto;padding:10px 0;}</p>
-<p class="p1">.sidebar-section{padding:4px 12px;font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-top:10px;margin-bottom:2px;}</p>
-<p class="p1">.nav-item{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--muted);transition:background .12s,color .12s;}</p>
-<p class="p1">.nav-item:hover{background:var(--bg);color:var(--text);}</p>
-<p class="p1">.nav-item.active{background:var(--bg);color:var(--text);font-weight:500;border-left:2px solid var(--text);}</p>
-<p class="p1">.nav-badge{margin-left:auto;font-size:10px;background:var(--amber-bg);color:var(--amber-txt);padding:1px 6px;border-radius:10px;}</p>
-<p class="p1">.nav-logout{margin-top:auto;border-top:0.5px solid var(--border);padding-top:8px;margin-top:12px;}</p>
-<p class="p2"><br></p>
-<p class="p1">.main{overflow-y:auto;padding:20px 24px;}</p>
-<p class="p1">.view{display:none;} .view.active{display:block;}</p>
-<p class="p2"><br></p>
-<p class="p1">.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;}</p>
-<p class="p1">.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;}</p>
-<p class="p1">.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}</p>
-<p class="p1">.kpi-val{font-size:28px;font-weight:500;line-height:1;}</p>
-<p class="p1">.kpi-sub{font-size:10px;color:var(--hint);margin-top:3px;}</p>
-<p class="p1">.kpi.blue{border-left:3px solid var(--blue);}</p>
-<p class="p1">.kpi.green{border-left:3px solid var(--green);}</p>
-<p class="p1">.kpi.amber{border-left:3px solid var(--amber);}</p>
-<p class="p1">.kpi.red{border-left:3px solid var(--red);}</p>
-<p class="p2"><br></p>
-<p class="p1">.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:14px;}</p>
-<p class="p1">.card-head{padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;}</p>
-<p class="p1">.card-head h2{font-size:13px;font-weight:500;flex:1;}</p>
-<p class="p2"><br></p>
-<p class="p1">.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}</p>
-<p class="p1">.sec-head h2{font-size:15px;font-weight:500;}</p>
-<p class="p2"><br></p>
-<p class="p1">.btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:6px 12px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;}</p>
-<p class="p1">.btn:hover{background:var(--bg);}</p>
-<p class="p1">.btn.primary{background:var(--text);color:var(--surface);border-color:var(--text);}</p>
-<p class="p1">.btn.primary:hover{opacity:.85;}</p>
-<p class="p1">.btn.sm{padding:3px 8px;font-size:11px;}</p>
-<p class="p1">.btn.ghost{border:none;background:none;color:var(--muted);padding:3px 6px;}</p>
-<p class="p1">.btn.ghost:hover{background:var(--bg);color:var(--text);}</p>
-<p class="p2"><br></p>
-<p class="p1">.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;white-space:nowrap;}</p>
-<p class="p1">.badge.blue{background:var(--blue-bg);color:var(--blue-txt);}</p>
-<p class="p1">.badge.green{background:var(--green-bg);color:var(--green-txt);}</p>
-<p class="p1">.badge.amber{background:var(--amber-bg);color:var(--amber-txt);}</p>
-<p class="p1">.badge.red{background:var(--red-bg);color:var(--red-txt);}</p>
-<p class="p1">.badge.gray{background:var(--gray-bg);color:var(--gray-txt);}</p>
-<p class="p1">.badge.teal{background:var(--teal-bg);color:var(--teal-txt);}</p>
-<p class="p2"><br></p>
-<p class="p1">.proj-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;}</p>
-<p class="p1">.proj-row:last-child{border-bottom:none;}</p>
-<p class="p1">.proj-row:hover{background:var(--surface2);}</p>
-<p class="p1">.proj-num{font-size:10px;color:var(--hint);width:20px;flex-shrink:0;text-align:right;}</p>
-<p class="p1">.proj-info{flex:1;min-width:0;}</p>
-<p class="p1">.proj-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}</p>
-<p class="p1">.proj-meta{font-size:10px;color:var(--muted);margin-top:1px;}</p>
-<p class="p1">.proj-progress{width:80px;flex-shrink:0;}</p>
-<p class="p1">.prog-bg{height:4px;background:var(--border2);border-radius:2px;margin-top:3px;}</p>
-<p class="p1">.prog-fill{height:100%;border-radius:2px;}</p>
-<p class="p2"><br></p>
-<p class="p1">.back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;}</p>
-<p class="p1">.back:hover{color:var(--text);}</p>
-<p class="p1">.detail-panel{display:none;} .detail-panel.open{display:block;}</p>
-<p class="p2"><br></p>
-<p class="p1">.action-tree{padding:12px 14px;}</p>
-<p class="p1">.action-node{margin-bottom:4px;}</p>
-<p class="p1">.action-row{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:var(--r2);border:0.5px solid var(--border);background:var(--surface2);position:relative;}</p>
-<p class="p1">.action-indent{padding-left:22px;border-left:1.5px solid var(--border2);margin-left:12px;margin-top:3px;}</p>
-<p class="p1">.action-toggle{background:none;border:none;cursor:pointer;color:var(--muted);padding:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:12px;}</p>
-<p class="p1">.action-check{width:14px;height:14px;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--green);}</p>
-<p class="p1">.action-content{flex:1;min-width:0;}</p>
-<p class="p1">.action-text{font-size:12px;line-height:1.4;}</p>
-<p class="p1">.action-text.done{text-decoration:line-through;color:var(--hint);}</p>
-<p class="p1">.action-dates{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;}</p>
-<p class="p1">.action-date-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:1px 6px;border-radius:3px;background:var(--bg);color:var(--muted);border:0.5px solid var(--border2);}</p>
-<p class="p1">.action-date-tag.overdue{background:var(--red-bg);color:var(--red-txt);border-color:var(--red);}</p>
-<p class="p1">.action-date-tag.soon{background:var(--amber-bg);color:var(--amber-txt);border-color:var(--amber);}</p>
-<p class="p1">.action-row-btns{display:flex;gap:2px;flex-shrink:0;}</p>
-<p class="p2"><br></p>
-<p class="p1">.add-action-row{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:4px;}</p>
-<p class="p1">.add-action-input{flex:1;font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);}</p>
-<p class="p1">.add-action-input:focus{outline:none;border-color:var(--blue);}</p>
-<p class="p1">.add-action-date{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:130px;}</p>
-<p class="p2"><br></p>
-<p class="p1">.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}</p>
-<p class="p1">.modal-bg.open{display:flex;}</p>
-<p class="p1">.modal{background:var(--surface);border-radius:var(--r);width:480px;max-width:96vw;max-height:88vh;overflow-y:auto;border:0.5px solid var(--border2);}</p>
-<p class="p1">.modal-head{padding:14px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}</p>
-<p class="p1">.modal-head h3{font-size:14px;font-weight:500;}</p>
-<p class="p1">.modal-body{padding:18px;display:flex;flex-direction:column;gap:12px;}</p>
-<p class="p1">.modal-foot{padding:12px 18px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}</p>
-<p class="p1">.field{display:flex;flex-direction:column;gap:4px;}</p>
-<p class="p1">.field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}</p>
-<p class="p1">.field input,.field select,.field textarea{font-size:12px;padding:7px 9px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:100%;}</p>
-<p class="p1">.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);}</p>
-<p class="p1">.field textarea{resize:vertical;min-height:60px;}</p>
-<p class="p1">.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}</p>
-<p class="p2"><br></p>
-<p class="p1">.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}</p>
-<p class="p1">.flt{font-size:11px;padding:3px 10px;border:0.5px solid var(--border2);border-radius:20px;background:var(--surface);color:var(--muted);cursor:pointer;}</p>
-<p class="p1">.flt.on{background:var(--text);color:var(--surface);border-color:var(--text);}</p>
-<p class="p2"><br></p>
-<p class="p1">.overdue-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:0.5px solid var(--border);}</p>
-<p class="p1">.overdue-item:last-child{border-bottom:none;}</p>
-<p class="p1">.empty{text-align:center;padding:32px;color:var(--hint);font-size:12px;}</p>
-<p class="p1">.prog-wrap{width:100%;}</p>
-<p class="p1">.prog-label{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;}</p>
-<p class="p2"><br></p>
-<p class="p1">.saving-indicator{position:fixed;bottom:16px;right:16px;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 14px;font-size:11px;color:var(--muted);display:none;z-index:300;}</p>
-<p class="p1">.saving-indicator.show{display:block;}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- LOGIN --&gt;</p>
-<p class="p1">&lt;div id="login-screen"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="login-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="logo"&gt;COMECA ARG&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Proyectos I&amp;D&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Seguimiento de proyectos y desarrollos 2026&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn-google" onclick="loginGoogle()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="https://www.google.com/favicon.ico"&gt; Ingresar con Google</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="login-error" id="login-error"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- APP --&gt;</p>
-<p class="p1">&lt;div id="app"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="topbar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="logo"&gt;COMECA ARG&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Proyectos I&amp;D 2026&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="spacer"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="user-info"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img id="user-photo" src="" style="display:none"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span id="user-name"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn sm" onclick="exportExcel()" style="margin-left:8px"&gt;⬇ Excel&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn sm" onclick="logout()" style="margin-left:4px"&gt;Salir&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sidebar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="sidebar-section"&gt;Vistas&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="nav-item active" id="nav-dashboard" onclick="showView('dashboard',this)"&gt;📊 Dashboard&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="nav-item" id="nav-proyectos" onclick="showView('proyectos',this)"&gt;🔧 Proyectos&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="nav-item" id="nav-desarrollos" onclick="showView('desarrollos',this)"&gt;🧪 Desarrollos&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="nav-item" id="nav-vencimientos" onclick="showView('vencimientos',this)"&gt;📅 Vencimientos &lt;span class="nav-badge" id="badge-venc"&gt;0&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="main" id="main"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="view active" id="view-dashboard"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sec-head"&gt;&lt;h2&gt;Dashboard&lt;/h2&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="kpi-grid" id="kpi-grid"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card"&gt;&lt;div class="card-head"&gt;&lt;h2&gt;Proyectos&lt;/h2&gt;&lt;/div&gt;&lt;div id="dash-proy"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card"&gt;&lt;div class="card-head"&gt;&lt;h2&gt;Desarrollos&lt;/h2&gt;&lt;/div&gt;&lt;div id="dash-dev"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card" style="margin-top:16px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-head"&gt;&lt;h2&gt;⚠️ Acciones vencidas o próximas&lt;/h2&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="dash-venc"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="view" id="view-proyectos"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sec-head"&gt;&lt;h2&gt;Proyectos&lt;/h2&gt;&lt;button class="btn primary" onclick="openNewItemModal('proyecto')"&gt;+ Nuevo&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="filters" id="flt-proy"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card" id="list-proy"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="detail-panel" id="detail-proy"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="back" onclick="closeDetail('proy')"&gt;← Volver a proyectos&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="detail-proy-body"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="view" id="view-desarrollos"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sec-head"&gt;&lt;h2&gt;Desarrollos&lt;/h2&gt;&lt;button class="btn primary" onclick="openNewItemModal('desarrollo')"&gt;+ Nuevo&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="filters" id="flt-dev"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card" id="list-dev"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="detail-panel" id="detail-dev"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="back" onclick="closeDetail('dev')"&gt;← Volver a desarrollos&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="detail-dev-body"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="view" id="view-vencimientos"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="sec-head"&gt;&lt;h2&gt;Acciones con fecha de revisión&lt;/h2&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="filters" id="flt-venc"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card" id="list-venc"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- MODAL ITEM --&gt;</p>
-<p class="p1">&lt;div class="modal-bg" id="modal-item" onclick="if(event.target===this)closeModalItem()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-head"&gt;&lt;h3 id="modal-item-title"&gt;Nuevo proyecto&lt;/h3&gt;&lt;button class="btn ghost" onclick="closeModalItem()"&gt;✕&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-body" id="modal-item-body"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-foot"&gt;&lt;button class="btn" onclick="closeModalItem()"&gt;Cancelar&lt;/button&gt;&lt;button class="btn primary" onclick="saveNewItem()"&gt;Guardar&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- MODAL ACCION --&gt;</p>
-<p class="p1">&lt;div class="modal-bg" id="modal-action" onclick="if(event.target===this)closeModalAction()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-head"&gt;&lt;h3&gt;Editar acción&lt;/h3&gt;&lt;button class="btn ghost" onclick="closeModalAction()"&gt;✕&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-body"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;Descripción&lt;/label&gt;&lt;textarea id="ea-text" rows="3"&gt;&lt;/textarea&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="field"&gt;&lt;label&gt;Fecha de revisión&lt;/label&gt;&lt;input type="date" id="ea-date"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="field"&gt;&lt;label&gt;Estado&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;select id="ea-estado"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="pendiente"&gt;Pendiente&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="en_curso"&gt;En curso&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="completado"&gt;Completado&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="bloqueado"&gt;Bloqueado&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;/select&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;Responsable&lt;/label&gt;&lt;input type="text" id="ea-resp"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-foot"&gt;&lt;button class="btn" onclick="closeModalAction()"&gt;Cancelar&lt;/button&gt;&lt;button class="btn primary" onclick="saveEditAction()"&gt;Guardar&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="saving-indicator" id="saving"&gt;Guardando...&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- FIREBASE --&gt;</p>
-<p class="p1">&lt;script type="module"&gt;</p>
-<p class="p1">import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";</p>
-<p class="p1">import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";</p>
-<p class="p1">import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";</p>
-<p class="p2"><br></p>
-<p class="p1">const firebaseConfig = {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>apiKey: "AIzaSyCBttbbkSteWw-kWE0GH46LlsXu1fvitY4",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>authDomain: "proyectos-id-608f0.firebaseapp.com",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>projectId: "proyectos-id-608f0",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>storageBucket: "proyectos-id-608f0.firebasestorage.app",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>messagingSenderId: "200175057154",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>appId: "1:200175057154:web:4aeaeffc0099bd1199ea1b"</p>
-<p class="p1">};</p>
-<p class="p2"><br></p>
-<p class="p1">const app = initializeApp(firebaseConfig);</p>
-<p class="p1">const auth = getAuth(app);</p>
-<p class="p1">const db = getFirestore(app);</p>
-<p class="p1">const provider = new GoogleAuthProvider();</p>
-<p class="p2"><br></p>
-<p class="p1">window.loginGoogle = async () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>await signInWithPopup(auth, provider);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} catch(e) {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('login-error').textContent = 'Error al ingresar. Intentá de nuevo.';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">};</p>
-<p class="p1">window.logout = () =&gt; signOut(auth);</p>
-<p class="p2"><br></p>
-<p class="p1">let saveTimeout = null;</p>
-<p class="p1">function showSaving(){ const s=document.getElementById('saving'); s.classList.add('show'); clearTimeout(saveTimeout); saveTimeout=setTimeout(()=&gt;s.classList.remove('show'),1500); }</p>
-<p class="p2"><br></p>
-<p class="p1">async function saveDB(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>showSaving();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>try {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>await setDoc(doc(db,'data','main'), { proyectos: window.DB.proyectos, desarrollos: window.DB.desarrollos });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} catch(e){ console.error('Error guardando:', e); }</p>
-<p class="p1">}</p>
-<p class="p1">window.saveDB = saveDB;</p>
-<p class="p2"><br></p>
-<p class="p1">onAuthStateChanged(auth, async (user) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(user){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('login-screen').style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('app').classList.add('visible');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('user-name').textContent = user.displayName || user.email;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(user.photoURL){ const img=document.getElementById('user-photo'); img.src=user.photoURL; img.style.display='block'; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Escuchar cambios en tiempo real</p>
-<p class="p1"><span class="Apple-converted-space">    </span>onSnapshot(doc(db,'data','main'), (snap) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if(snap.exists()){</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const data = snap.data();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.DB = { proyectos: data.proyectos||[], desarrollos: data.desarrollos||[] };</p>
-<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Primera vez: cargar datos iniciales</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.DB = getInitialData();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>saveDB();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>renderDashboard();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const activeView = document.querySelector('.view.active');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if(activeView){</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if(activeView.id==='view-proyectos') renderList('proy');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if(activeView.id==='view-desarrollos') renderList('dev');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if(activeView.id==='view-vencimientos') renderVencimientos();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('login-screen').style.display='flex';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('app').classList.remove('visible');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">});</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;!-- XLSX --&gt;</p>
-<p class="p1">&lt;script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"&gt;&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">// ── UTILS ────────────────────────────────────────────────────────────────</p>
-<p class="p1">const TODAY = new Date(); TODAY.setHours(0,0,0,0);</p>
-<p class="p1">function uid(){ return '_'+Math.random().toString(36).slice(2,9); }</p>
-<p class="p1">function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }</p>
-<p class="p1">function dateStatus(s){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!s) return 'none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const d=new Date(s); d.setHours(0,0,0,0);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const diff=(d-TODAY)/(1000*60*60*24);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(diff&lt;0) return 'overdue';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(diff&lt;=7) return 'soon';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return 'ok';</p>
-<p class="p1">}</p>
-<p class="p1">function estadoBadge(e){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const map={pendiente:'gray',en_curso:'blue',completado:'green',bloqueado:'red'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const labels={pendiente:'pendiente',en_curso:'en curso',completado:'completado',bloqueado:'bloqueado'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return `&lt;span class="badge ${map[e]||'gray'}"&gt;${labels[e]||e}&lt;/span&gt;`;</p>
-<p class="p1">}</p>
-<p class="p1">function progColor(p){ return p&gt;=80?'var(--green)':p&gt;=40?'var(--amber)':'var(--hint)'; }</p>
-<p class="p1">function makeAction(text,date='',estado='pendiente',responsable=''){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return {id:uid(),text,date,estado,responsable,done:false,children:[]};</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── INITIAL DATA ──────────────────────────────────────────────────────────</p>
-<p class="p1">function getInitialData(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>proyectos: [</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p1',num:1,nombre:'Cambio Soldadora San Juan',tipo:'Traslado/Cambio',estado:'en_curso',pg:30,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Intercambio de Soldadora 881 de Pilar a San Juan','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Upgrade de PLCs por obsoletos','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Instalación de monitor WECAN','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p2',num:2,nombre:'Formato 70 – Longwen 826',tipo:'Formato',estado:'en_curso',pg:70,inst:70,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Corte de Hojalata y prueba de matriz ok','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Barnizado ok','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Arranque estimado 21-22/05','2025-05-22','en_curso','Producción'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p3',num:4,nombre:'Impresora 610 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:40,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Relevamiento equipo mecánico y eléctrico','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Cotizaciones de reparaciones y repuestos','','en_curso','Compras'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Limpieza y arranque con fallas – definir plan','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p4',num:5,nombre:'Barnizadora 601 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Relevamiento equipo mecánico y eléctrico','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Cotizaciones de reparaciones y repuestos','','pendiente','Compras'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Limpieza y arranque con fallas','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p5',num:6,nombre:'ESTES – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:70,inst:90,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Puesta en marcha y regulaciones','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Repuestos en fabricación','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Pruebas en TFS 0,16 DR8 impresas hojalata Perú JinTai','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p6',num:7,nombre:'CEPEDA – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:50,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Cotización mejora corona y piñón','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Cotización matriz 0,16 DR8 1er OP','','en_curso','Compras'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Pruebas en TFS 0,18 impresa','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p7',num:8,nombre:'ESTES – Cámara impresora 810',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Orden de compra emitida','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Preparación de muestras en hojas para enviar a China','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p8',num:9,nombre:'881 – WECAN Monitor de soldadura',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Recepción de monitor','2025-05-22','pendiente','Logística'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Solicitud plan de trabajo montaje y puesta en marcha','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Condiciones de montaje 26/5 – disponibilidad técnicos','2025-05-26','pendiente','Técnica'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'p9',num:10,nombre:'Despaletizador Uriburu',tipo:'Compra',estado:'en_curso',pg:40,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Relevamiento de medidas','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Solicitud cotización – Costa Rica 26/4','','en_curso','Compras'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('A la espera de la propuesta','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>],</p>
-<p class="p1"><span class="Apple-converted-space">    </span>desarrollos: [</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d1',num:1,nombre:'Bobinas TFS B960 0,18 – Tapas 68-76',tipo:'Prueba industrial',estado:'en_curso',pg:20,inst:50,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Prueba Industrial INALPA 100% – Resultados ok – Falta firma ET','','en_curso','Comercial'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Pruebas SWIFT 20% – Resultados ok – Falta firma ET','','en_curso','Comercial'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Prueba industrial Uriburu 0% – Programado semana 18/05','2025-05-18','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d2',num:2,nombre:'Proyecto Latas 9 Libras SWIFT – A12 Chile',tipo:'Proyecto latas',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Entrega de muestras 06/04','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Envases Aguila – aprobación SENASA – en tratativas','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d3',num:4,nombre:'Envase 68x32 Fondo Apilable SWIFT',tipo:'Envase',estado:'pendiente',pg:0,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('En stand by','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Muestras en Comeca envases de Costa Rica','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d4',num:5,nombre:'Easy Open 68 SWIFT (Tapas Chinas)',tipo:'Tapas',estado:'en_curso',pg:90,inst:100,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Prueba Industrial 400 mil unidades – Resultados ok – Falta firma ET','','en_curso','Comercial'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d5',num:6,nombre:'Envases 76x95 necking con Easy Open – SWIFT',tipo:'Envases',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Envío muestras 76x95 y 76x82 + tapas EO76 6/4 – Envío ET','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Solicitud barnices BPANI – muestras a proveedores','','en_curso','Técnica'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Validación completa barnices en proceso y cliente','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d6',num:7,nombre:'ARCOR – EO87 / Tps70 EPINSA / EO76 Tomate / TH63',tipo:'Tapas',estado:'en_curso',pg:50,inst:60,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>{id:'a1d6',text:'EO87 – Solicitud 300 mil tapas prueba industrial',date:'',estado:'en_curso',responsable:'Comercial',done:false,children:[</p>
-<p class="p1"><span class="Apple-converted-space">          </span>makeAction('Confirmar disponibilidad de línea','','pendiente','Producción'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('TF70 – 300 mil probadas – Falta ET firmada e informe','','en_curso','Comercial'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('EO76 Tomate – prueba industrial – disponibilidad septiembre','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('TH63 – Dimensiones OK – Falta enviar muestras con botón','','pendiente','Técnica'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d7',num:8,nombre:'MARS – EO76 ETP y TFS',tipo:'Tapas',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('EO76 ETP – pruebas iniciales ok – Solicitud prueba industrial','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('EO76 TFS – pruebas iniciales ok – Materiales libres cromo VI','','en_curso'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Confirmar que tapas sean BPANI','','pendiente','Técnica'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d8',num:9,nombre:'A10 – A8 Chile validación',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Recepción de muestras 9/5','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Planificar pruebas en INALPA cierre con tapas Argentina','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Especificaciones corregidas – ANMAT aprobado','','completado'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>{id:'d9',num:10,nombre:'Tinplate Reduction – validación 57/52/65 en 0,18',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Formato 52x110 (REPELENTE FUYI) – Sin novedades SCJ Pilar','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Formato 65x100 en 0,18 – Campaña pospuesta a mayo','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Formatos 65x238/250/300 – Campaña pospuesta a mayo','','pendiente'),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>makeAction('Domos 57 importados – Inician por Comercial 30/03','','en_curso','Comercial'),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>]},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>]</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── FLAT ACTIONS ──────────────────────────────────────────────────────────</p>
-<p class="p1">function flatActions(items){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const result=[];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>items.forEach(item=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>(function walk(actions){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>actions.forEach(a=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">        </span>result.push({action:a,item});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if(a.children&amp;&amp;a.children.length) walk(a.children);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>})(item.actions||[]);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return result;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── NAVIGATION ────────────────────────────────────────────────────────────</p>
-<p class="p1">let filterProy='todos', filterDev='todos', filterVenc='todos';</p>
-<p class="p2"><br></p>
-<p class="p1">window.showView = function(id, el){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.view').forEach(v=&gt;v.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.nav-item').forEach(n=&gt;n.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('view-'+id).classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(id==='dashboard') renderDashboard();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(id==='proyectos') renderList('proy');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(id==='desarrollos') renderList('dev');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(id==='vencimientos') renderVencimientos();</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── DASHBOARD ─────────────────────────────────────────────────────────────</p>
-<p class="p1">function renderDashboard(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!window.DB) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const allProj=[...window.DB.proyectos,...window.DB.desarrollos];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const allActions=flatActions(allProj);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const vencidas=allActions.filter(x=&gt;!x.action.done&amp;&amp;dateStatus(x.action.date)==='overdue').length;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const proximas=allActions.filter(x=&gt;!x.action.done&amp;&amp;dateStatus(x.action.date)==='soon').length;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('badge-venc').textContent=vencidas+proximas;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('kpi-grid').innerHTML=`</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="kpi blue"&gt;&lt;div class="kpi-lbl"&gt;Proyectos&lt;/div&gt;&lt;div class="kpi-val"&gt;${window.DB.proyectos.length}&lt;/div&gt;&lt;div class="kpi-sub"&gt;${window.DB.proyectos.filter(p=&gt;p.estado==='en_curso').length} en curso&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="kpi teal"&gt;&lt;div class="kpi-lbl"&gt;Desarrollos&lt;/div&gt;&lt;div class="kpi-val"&gt;${window.DB.desarrollos.length}&lt;/div&gt;&lt;div class="kpi-sub"&gt;${window.DB.desarrollos.filter(d=&gt;d.estado==='en_curso').length} en curso&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="kpi amber"&gt;&lt;div class="kpi-lbl"&gt;Acciones vencidas&lt;/div&gt;&lt;div class="kpi-val"&gt;${vencidas}&lt;/div&gt;&lt;div class="kpi-sub"&gt;${proximas} próximas a vencer&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="kpi green"&gt;&lt;div class="kpi-lbl"&gt;Completados&lt;/div&gt;&lt;div class="kpi-val"&gt;${allProj.filter(i=&gt;i.estado==='completado').length}&lt;/div&gt;&lt;div class="kpi-sub"&gt;de ${allProj.length} total&lt;/div&gt;&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const renderMini=(arr,el)=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!arr.length){el.innerHTML='&lt;div class="empty"&gt;Sin datos&lt;/div&gt;';return;}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>el.innerHTML=arr.map(i=&gt;`&lt;div class="proj-row" onclick="openDetailFromDash('${i.id}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="proj-num"&gt;${i.num}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="proj-info"&gt;&lt;div class="proj-name"&gt;${i.nombre}&lt;/div&gt;&lt;div class="proj-meta"&gt;${i.tipo}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>${estadoBadge(i.estado)}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="proj-progress"&gt;&lt;div class="prog-label"&gt;&lt;span&gt;PG&lt;/span&gt;&lt;span&gt;${i.pg}%&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="prog-bg"&gt;&lt;div class="prog-fill" style="width:${i.pg}%;background:${progColor(i.pg)}"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>renderMini(window.DB.proyectos, document.getElementById('dash-proy'));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>renderMini(window.DB.desarrollos, document.getElementById('dash-dev'));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const urgentes=allActions.filter(x=&gt;!x.action.done&amp;&amp;(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon'))</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.sort((a,b)=&gt;(a.action.date||'9999')&gt;(b.action.date||'9999')?1:-1).slice(0,8);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const dv=document.getElementById('dash-venc');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!urgentes.length){dv.innerHTML='&lt;div class="empty"&gt;No hay acciones vencidas o próximas&lt;/div&gt;';return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>dv.innerHTML=urgentes.map(({action:a,item:i})=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const st=dateStatus(a.date);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="overdue-item"&gt;&lt;span class="action-date-tag ${st}"&gt;📅 ${fmtDate(a.date)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="flex:1;min-width:0"&gt;&lt;div style="font-size:12px;font-weight:500"&gt;${a.text}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="font-size:10px;color:var(--muted)"&gt;${i.nombre}${a.responsable?' · '+a.responsable:''}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>${estadoBadge(a.estado)}&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
-<p class="p1">}</p>
-<p class="p1">window.renderDashboard=renderDashboard;</p>
-<p class="p2"><br></p>
-<p class="p1">// ── LIST ──────────────────────────────────────────────────────────────────</p>
-<p class="p1">function renderList(key){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!window.DB) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const flt=key==='proy'?filterProy:filterDev;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const estados=['todos','en_curso','pendiente','completado','bloqueado'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const labels={todos:'Todos',en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('flt-'+key).innerHTML=estados.map(e=&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>`&lt;button class="flt ${flt===e?'on':''}" onclick="setFilter('${key}','${e}')"&gt;${labels[e]} (${e==='todos'?arr.length:arr.filter(i=&gt;i.estado===e).length})&lt;/button&gt;`</p>
-<p class="p1"><span class="Apple-converted-space">  </span>).join('');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const filtered=flt==='todos'?arr:arr.filter(i=&gt;i.estado===flt);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const listEl=document.getElementById('list-'+key);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!filtered.length){listEl.innerHTML='&lt;div class="empty"&gt;Sin elementos&lt;/div&gt;';return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>listEl.innerHTML=filtered.map(item=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const pendActs=flatActions([item]).filter(x=&gt;!x.action.done&amp;&amp;(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon')).length;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="proj-row" onclick="openDetail('${key}','${item.id}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="proj-num"&gt;${item.num}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="proj-info"&gt;&lt;div class="proj-name"&gt;${item.nombre}&lt;/div&gt;&lt;div class="proj-meta"&gt;${item.tipo} · ${(item.actions||[]).length} acciones&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>${estadoBadge(item.estado)}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="proj-progress"&gt;&lt;div class="prog-label"&gt;&lt;span&gt;PG&lt;/span&gt;&lt;span&gt;${item.pg}%&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="prog-bg"&gt;&lt;div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>${pendActs&gt;0?`&lt;span class="badge amber"&gt;⚠ ${pendActs}&lt;/span&gt;`:''}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
-<p class="p1">}</p>
-<p class="p1">window.setFilter=function(key,val){ if(key==='proy') filterProy=val; else filterDev=val; renderList(key); }</p>
-<p class="p2"><br></p>
-<p class="p1">// ── DETAIL ────────────────────────────────────────────────────────────────</p>
-<p class="p1">let currentDetail={key:null,id:null};</p>
-<p class="p1">window.openDetail=function(key,id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>currentDetail={key,id};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('list-'+key).style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('flt-'+key).style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('detail-'+key).classList.add('open');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>renderDetail(key,id);</p>
-<p class="p1">}</p>
-<p class="p1">window.closeDetail=function(key){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('list-'+key).style.display='';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('flt-'+key).style.display='';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('detail-'+key).classList.remove('open');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>renderList(key);</p>
-<p class="p1">}</p>
-<p class="p1">function renderDetail(key,id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=arr.find(x=&gt;x.id===id); if(!item) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const label2=key==='proy'?'Instalación':'Pruebas';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('detail-'+key+'-body').innerHTML=`</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card" style="margin-bottom:14px"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-head"&gt;&lt;h2&gt;${item.nombre}&lt;/h2&gt;${estadoBadge(item.estado)}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn sm" onclick="openEditItemModal('${key}','${id}')"&gt;✏️ Editar&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:14px"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px"&gt;Tipo&lt;/div&gt;&lt;div style="font-size:12px"&gt;${item.tipo}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px"&gt;Proyecto General&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="prog-bg" style="margin-top:6px"&gt;&lt;div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div style="font-size:11px;color:var(--muted);margin-top:3px"&gt;${item.pg}%&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;&lt;div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px"&gt;${label2}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="prog-bg" style="margin-top:6px"&gt;&lt;div class="prog-fill" style="width:${item.inst}%;background:${progColor(item.inst)}"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div style="font-size:11px;color:var(--muted);margin-top:3px"&gt;${item.inst}%&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-head"&gt;&lt;h2&gt;Acciones&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn sm primary" onclick="addRootAction('${key}','${id}')"&gt;+ Nueva acción&lt;/button&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="action-tree" id="tree-${id}"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>renderTree(item);</p>
-<p class="p1">}</p>
-<p class="p1">window.openDetailFromDash=function(id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const isProy=window.DB.proyectos.find(p=&gt;p.id===id);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(isProy){ showView('proyectos',document.getElementById('nav-proyectos')); openDetail('proy',id); }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>else { showView('desarrollos',document.getElementById('nav-desarrollos')); openDetail('dev',id); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── TREE ──────────────────────────────────────────────────────────────────</p>
-<p class="p1">const expandState={};</p>
-<p class="p1">function renderTree(item){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const el=document.getElementById('tree-'+item.id); if(!el) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!(item.actions||[]).length){el.innerHTML='&lt;div class="empty"&gt;Sin acciones. Agregá la primera.&lt;/div&gt;';return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.innerHTML=renderNodes(item.actions,item);</p>
-<p class="p1">}</p>
-<p class="p1">function renderNodes(actions,item){ return actions.map(a=&gt;renderNode(a,item)).join(''); }</p>
-<p class="p1">function renderNode(a,item){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const hasChildren=a.children&amp;&amp;a.children.length&gt;0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const isOpen=expandState[a.id]!==false;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const st=dateStatus(a.date);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const dtClass=st==='overdue'?'overdue':st==='soon'?'soon':'';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const stateColors={pendiente:'var(--hint)',en_curso:'var(--blue)',completado:'var(--green)',bloqueado:'var(--red)'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return `&lt;div class="action-node"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="action-row" style="border-left:2.5px solid ${stateColors[a.estado]||'var(--hint)'}"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="action-toggle" onclick="toggleExpand('${a.id}','${item.id}')" ${!hasChildren?'style="visibility:hidden"':''}&gt;${hasChildren&amp;&amp;isOpen?'▾':'▸'}&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;input type="checkbox" class="action-check" ${a.done?'checked':''} onchange="toggleDone('${a.id}','${item.id}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="action-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="action-text ${a.done?'done':''}"&gt;${a.text}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="action-dates"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>${a.date?`&lt;span class="action-date-tag ${dtClass}"&gt;📅 Revisión: ${fmtDate(a.date)}&lt;/span&gt;`:`&lt;span class="action-date-tag" style="cursor:pointer" onclick="openEditActionModal('${a.id}','${item.id}')"&gt;+ Agregar fecha&lt;/span&gt;`}</p>
-<p class="p1"><span class="Apple-converted-space">          </span>${a.responsable?`&lt;span class="action-date-tag"&gt;👤 ${a.responsable}&lt;/span&gt;`:''}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="action-row-btns"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn ghost sm" onclick="openEditActionModal('${a.id}','${item.id}')"&gt;✏️ Editar&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn ghost sm" onclick="showAddChildForm('${a.id}','${item.id}')"&gt;+ Sub-acción&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn ghost sm" style="color:var(--red)" onclick="deleteAction('${a.id}','${item.id}')"&gt;🗑 Borrar&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="addform-${a.id}" style="display:none;padding-left:22px;margin-top:3px"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>${hasChildren&amp;&amp;isOpen?`&lt;div class="action-indent"&gt;${renderNodes(a.children,item)}&lt;/div&gt;`:''}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;`;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">window.toggleExpand=function(aid,itemId){ expandState[aid]=expandState[aid]===false?true:false; rerenderTree(itemId); }</p>
-<p class="p1">window.toggleDone=function(aid,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId); const a=findAction(item.actions,aid);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(a){ a.done=!a.done; rerenderTree(itemId); window.saveDB(); }</p>
-<p class="p1">}</p>
-<p class="p1">function rerenderTree(itemId){ const item=findItem(itemId); if(item) renderTree(item); }</p>
-<p class="p1">function findItem(id){ return [...(window.DB.proyectos||[]),...(window.DB.desarrollos||[])].find(x=&gt;x.id===id); }</p>
-<p class="p1">function findAction(actions,id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for(const a of actions){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(a.id===id) return a;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(a.children){ const f=findAction(a.children,id); if(f) return f; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return null;</p>
-<p class="p1">}</p>
-<p class="p1">function findParentArr(actions,id){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for(const a of actions){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(a.children){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if(a.children.find(c=&gt;c.id===id)) return a.children;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const f=findParentArr(a.children,id); if(f) return f;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return null;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">window.addRootAction=function(key,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId); if(!item) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const na=makeAction('Nueva acción');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>item.actions.push(na);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>rerenderTree(itemId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>openEditActionModal(na.id,itemId);</p>
-<p class="p1">}</p>
-<p class="p1">window.showAddChildForm=function(parentId,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const el=document.getElementById('addform-'+parentId); if(!el) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(el.style.display!=='none'){el.style.display='none';el.innerHTML='';return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.style.display='block';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.innerHTML=`&lt;div class="add-action-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input class="add-action-input" id="child-txt-${parentId}" placeholder="Descripción de la sub-acción…" onkeydown="if(event.key==='Enter')saveChildAction('${parentId}','${itemId}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input class="add-action-date" type="date" id="child-date-${parentId}"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn sm primary" onclick="saveChildAction('${parentId}','${itemId}')"&gt;Agregar&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn sm" onclick="document.getElementById('addform-${parentId}').style.display='none'"&gt;✕&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('child-txt-'+parentId).focus();</p>
-<p class="p1">}</p>
-<p class="p1">window.saveChildAction=function(parentId,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const txt=document.getElementById('child-txt-'+parentId)?.value.trim(); if(!txt) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const date=document.getElementById('child-date-'+parentId)?.value||'';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId); const parent=findAction(item.actions,parentId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!parent) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!parent.children) parent.children=[];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>expandState[parentId]=true;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>parent.children.push(makeAction(txt,date));</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('addform-'+parentId).style.display='none';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>rerenderTree(itemId); window.saveDB();</p>
-<p class="p1">}</p>
-<p class="p1">window.deleteAction=function(aid,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!confirm('¿Eliminar esta acción y todas sus sub-acciones?')) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const parentArr=findParentArr(item.actions,aid)||item.actions;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const idx=parentArr.findIndex(a=&gt;a.id===aid);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(idx&gt;-1){ parentArr.splice(idx,1); rerenderTree(itemId); window.saveDB(); }</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">let editActionCtx={aid:null,itemId:null};</p>
-<p class="p1">window.openEditActionModal=function(aid,itemId){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>editActionCtx={aid,itemId};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('ea-text').value=a.text;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('ea-date').value=a.date||'';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('ea-estado').value=a.estado||'pendiente';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('ea-resp').value=a.responsable||'';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modal-action').classList.add('open');</p>
-<p class="p1">}</p>
-<p class="p1">window.closeModalAction=function(){ document.getElementById('modal-action').classList.remove('open'); }</p>
-<p class="p1">window.saveEditAction=function(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const {aid,itemId}=editActionCtx;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>a.text=document.getElementById('ea-text').value.trim()||a.text;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>a.date=document.getElementById('ea-date').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>a.estado=document.getElementById('ea-estado').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>a.responsable=document.getElementById('ea-resp').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>closeModalAction(); rerenderTree(itemId); window.saveDB();</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── VENCIMIENTOS ──────────────────────────────────────────────────────────</p>
-<p class="p1">function renderVencimientos(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!window.DB) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const allActions=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=&gt;x.action.date&amp;&amp;!x.action.done);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const filters=['todos','overdue','soon','ok'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const labels={todos:'Todos',overdue:'Vencidos',soon:'Esta semana',ok:'Futuros'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('flt-venc').innerHTML=filters.map(f=&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>`&lt;button class="flt ${filterVenc===f?'on':''}" onclick="setFilterVenc('${f}')"&gt;${labels[f]} (${f==='todos'?allActions.length:allActions.filter(x=&gt;dateStatus(x.action.date)===f).length})&lt;/button&gt;`</p>
-<p class="p1"><span class="Apple-converted-space">  </span>).join('');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const filtered=filterVenc==='todos'?allActions:allActions.filter(x=&gt;dateStatus(x.action.date)===filterVenc);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>filtered.sort((a,b)=&gt;(a.action.date||'9999')&gt;(b.action.date||'9999')?1:-1);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const el=document.getElementById('list-venc');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!filtered.length){el.innerHTML='&lt;div class="empty"&gt;Sin acciones con fecha en esta vista&lt;/div&gt;';return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>el.innerHTML=filtered.map(({action:a,item:i})=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const st=dateStatus(a.date);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return `&lt;div class="overdue-item" style="cursor:pointer" onclick="openDetailFromDash('${i.id}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="action-date-tag ${st}"&gt;📅 ${fmtDate(a.date)}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="flex:1;min-width:0"&gt;&lt;div style="font-size:12px;font-weight:500"&gt;${a.text}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="font-size:10px;color:var(--muted)"&gt;${i.nombre}${a.responsable?' · '+a.responsable:''}&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>${estadoBadge(a.estado)}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}).join('');</p>
-<p class="p1">}</p>
-<p class="p1">window.setFilterVenc=function(v){ filterVenc=v; renderVencimientos(); }</p>
-<p class="p2"><br></p>
-<p class="p1">// ── NEW/EDIT ITEM ─────────────────────────────────────────────────────────</p>
-<p class="p1">let newItemCtx={type:null,editId:null};</p>
-<p class="p1">window.openNewItemModal=function(type){ newItemCtx={type,editId:null}; document.getElementById('modal-item-title').textContent=type==='proyecto'?'Nuevo proyecto':'Nuevo desarrollo'; buildItemBody(type,null); document.getElementById('modal-item').classList.add('open'); }</p>
-<p class="p1">window.openEditItemModal=function(key,id){ const item=findItem(id); if(!item) return; newItemCtx={type:key==='proy'?'proyecto':'desarrollo',editId:id}; document.getElementById('modal-item-title').textContent='Editar'; buildItemBody(newItemCtx.type,item); document.getElementById('modal-item').classList.add('open'); }</p>
-<p class="p1">function buildItemBody(type,item){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const label2=type==='proyecto'?'Instalación':'Pruebas industriales';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('modal-item-body').innerHTML=`</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Nombre&lt;/label&gt;&lt;input type="text" id="fi-nombre" value="${item?item.nombre:''}"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;Tipo&lt;/label&gt;&lt;input type="text" id="fi-tipo" value="${item?item.tipo:''}" placeholder="ej: Compra, Traslado…"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;Estado&lt;/label&gt;&lt;select id="fi-estado"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="en_curso" ${item?.estado==='en_curso'?'selected':''}&gt;En curso&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="pendiente" ${item?.estado==='pendiente'?'selected':''}&gt;Pendiente&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="completado" ${item?.estado==='completado'?'selected':''}&gt;Completado&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;option value="bloqueado" ${item?.estado==='bloqueado'?'selected':''}&gt;Bloqueado&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field-row"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;% Proyecto General&lt;/label&gt;&lt;input type="number" id="fi-pg" value="${item?item.pg:0}" min="0" max="100"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="field"&gt;&lt;label&gt;% ${label2}&lt;/label&gt;&lt;input type="number" id="fi-inst" value="${item?item.inst:0}" min="0" max="100"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;`;</p>
-<p class="p1">}</p>
-<p class="p1">window.closeModalItem=function(){ document.getElementById('modal-item').classList.remove('open'); }</p>
-<p class="p1">window.saveNewItem=function(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const nombre=document.getElementById('fi-nombre').value.trim(); if(!nombre){alert('Ingresá el nombre');return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const tipo=document.getElementById('fi-tipo').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const estado=document.getElementById('fi-estado').value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const pg=parseInt(document.getElementById('fi-pg').value)||0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const inst=parseInt(document.getElementById('fi-inst').value)||0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const {type,editId}=newItemCtx;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const arr=type==='proyecto'?window.DB.proyectos:window.DB.desarrollos;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(editId){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const item=arr.find(x=&gt;x.id===editId);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(item) Object.assign(item,{nombre,tipo,estado,pg,inst});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>closeModalItem();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const key=type==='proyecto'?'proy':'dev';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>renderDetail(key,editId);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const nums=arr.map(x=&gt;x.num); const num=nums.length?Math.max(...nums)+1:1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>arr.push({id:uid(),num,nombre,tipo,estado,pg,inst,actions:[]});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>closeModalItem();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>renderList(type==='proyecto'?'proy':'dev');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>window.saveDB();</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">// ── EXPORT EXCEL ──────────────────────────────────────────────────────────</p>
-<p class="p1">window.exportExcel=function(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(typeof XLSX==='undefined'){alert('Cargando librería, intentá en segundos...');return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!window.DB){alert('Sin datos');return;}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wb=XLSX.utils.book_new();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const elbl={en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>function walkRows(actions,item,rows,depth){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>actions.forEach(a=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const prefix='<span class="Apple-converted-space">  </span>'.repeat(depth)+(depth&gt;0?'↳ ':'');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>rows.push([depth===0?item.num:'',depth===0?item.nombre:'',depth===0?item.tipo:'',depth===0?(elbl[item.estado]||item.estado):'',depth===0?item.pg+'%':'',depth===0?item.inst+'%':'','Nivel '+(depth+1),prefix+a.text,elbl[a.estado]||a.estado||'',a.date?fmtDate(a.date):'',a.responsable||'',a.done?'Sí':'No']);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if(a.children&amp;&amp;a.children.length) walkRows(a.children,item,rows,depth+1);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const hdr=['#','Nombre','Tipo','Estado','% PG','% Inst/Pruebas','Nivel','Acción','Estado acción','Fecha revisión','Responsable','Completada'];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const rp=[hdr]; window.DB.proyectos.forEach(i=&gt;{ if(!i.actions.length) rp.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rp,0); });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wp=XLSX.utils.aoa_to_sheet(rp); wp['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=&gt;({wch:w})); XLSX.utils.book_append_sheet(wb,wp,'Proyectos');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const rd=[hdr]; window.DB.desarrollos.forEach(i=&gt;{ if(!i.actions.length) rd.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rd,0); });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wd=XLSX.utils.aoa_to_sheet(rd); wd['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=&gt;({wch:w})); XLSX.utils.book_append_sheet(wb,wd,'Desarrollos');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const allF=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=&gt;x.action.date);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>allF.sort((a,b)=&gt;(a.action.date||'9999')&gt;(b.action.date||'9999')?1:-1);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const rv=[['Proyecto/Desarrollo','Tipo','Acción','Estado','Fecha revisión','Responsable','Completada','Alerta']];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>allF.forEach(({action:a,item:i})=&gt;{ const st=dateStatus(a.date); rv.push([i.nombre,i.tipo,a.text,elbl[a.estado]||a.estado||'',fmtDate(a.date),a.responsable||'',a.done?'Sí':'No',st==='overdue'?'VENCIDA':st==='soon'?'Esta semana':'OK']); });</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wv=XLSX.utils.aoa_to_sheet(rv); wv['!cols']=[30,16,52,12,14,16,10,12].map(w=&gt;({wch:w})); XLSX.utils.book_append_sheet(wb,wv,'Vencimientos');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const allI=[...window.DB.proyectos,...window.DB.desarrollos]; const allA=flatActions(allI);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const rr=[['RESUMEN – COMECA ARG / PROYECTOS I&amp;D 2026'],['Exportado:',new Date().toLocaleDateString('es-AR')],[],['ÍTEM','VALOR'],['Proyectos activos',window.DB.proyectos.length],['Desarrollos activos',window.DB.desarrollos.length],['Total',allI.length],['En curso',allI.filter(i=&gt;i.estado==='en_curso').length],['Completados',allI.filter(i=&gt;i.estado==='completado').length],['Pendientes/Bloqueados',allI.filter(i=&gt;i.estado==='pendiente'||i.estado==='bloqueado').length],[],['Total acciones',allA.length],['Completadas',allA.filter(x=&gt;x.action.done).length],['Con fecha de revisión',allA.filter(x=&gt;x.action.date).length],['Vencidas',allA.filter(x=&gt;!x.action.done&amp;&amp;dateStatus(x.action.date)==='overdue').length],['Próximas (7 días)',allA.filter(x=&gt;!x.action.done&amp;&amp;dateStatus(x.action.date)==='soon').length]];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const wr=XLSX.utils.aoa_to_sheet(rr); wr['!cols']=[{wch:32},{wch:16}]; XLSX.utils.book_append_sheet(wb,wr,'Resumen');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>XLSX.writeFile(wb,'ProyectosID_'+new Date().toISOString().slice(0,10)+'.xlsx');</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <span class="logo">COMECA ARG</span>
+    <h2>Proyectos I&D</h2>
+    <p>Seguimiento de proyectos y desarrollos 2026</p>
+    <button class="btn-google" onclick="loginGoogle()">
+      <img src="https://www.google.com/favicon.ico"> Ingresar con Google
+    </button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <span class="logo">COMECA ARG</span>
+    <h1>Proyectos I&D 2026</h1>
+    <span class="spacer"></span>
+    <div class="user-info">
+      <img id="user-photo" src="" style="display:none">
+      <span id="user-name"></span>
+      <button class="btn sm" onclick="exportExcel()" style="margin-left:8px">⬇ Excel</button>
+      <button class="btn sm" onclick="logout()" style="margin-left:4px">Salir</button>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-section">Vistas</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="showView('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-item" id="nav-proyectos" onclick="showView('proyectos',this)">🔧 Proyectos</div>
+    <div class="nav-item" id="nav-desarrollos" onclick="showView('desarrollos',this)">🧪 Desarrollos</div>
+    <div class="nav-item" id="nav-vencimientos" onclick="showView('vencimientos',this)">📅 Vencimientos <span class="nav-badge" id="badge-venc">0</span></div>
+  </div>
+  <div class="main" id="main">
+    <div class="view active" id="view-dashboard">
+      <div class="sec-head"><h2>Dashboard</h2></div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card"><div class="card-head"><h2>Proyectos</h2></div><div id="dash-proy"></div></div>
+        <div class="card"><div class="card-head"><h2>Desarrollos</h2></div><div id="dash-dev"></div></div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="card-head"><h2>⚠️ Acciones vencidas o próximas</h2></div>
+        <div id="dash-venc"></div>
+      </div>
+    </div>
+    <div class="view" id="view-proyectos">
+      <div class="sec-head"><h2>Proyectos</h2><button class="btn primary" onclick="openNewItemModal('proyecto')">+ Nuevo</button></div>
+      <div class="filters" id="flt-proy"></div>
+      <div class="card" id="list-proy"></div>
+      <div class="detail-panel" id="detail-proy">
+        <div class="back" onclick="closeDetail('proy')">← Volver a proyectos</div>
+        <div id="detail-proy-body"></div>
+      </div>
+    </div>
+    <div class="view" id="view-desarrollos">
+      <div class="sec-head"><h2>Desarrollos</h2><button class="btn primary" onclick="openNewItemModal('desarrollo')">+ Nuevo</button></div>
+      <div class="filters" id="flt-dev"></div>
+      <div class="card" id="list-dev"></div>
+      <div class="detail-panel" id="detail-dev">
+        <div class="back" onclick="closeDetail('dev')">← Volver a desarrollos</div>
+        <div id="detail-dev-body"></div>
+      </div>
+    </div>
+    <div class="view" id="view-vencimientos">
+      <div class="sec-head"><h2>Acciones con fecha de revisión</h2></div>
+      <div class="filters" id="flt-venc"></div>
+      <div class="card" id="list-venc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ITEM -->
+<div class="modal-bg" id="modal-item" onclick="if(event.target===this)closeModalItem()">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modal-item-title">Nuevo proyecto</h3><button class="btn ghost" onclick="closeModalItem()">✕</button></div>
+    <div class="modal-body" id="modal-item-body"></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModalItem()">Cancelar</button><button class="btn primary" onclick="saveNewItem()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- MODAL ACCION -->
+<div class="modal-bg" id="modal-action" onclick="if(event.target===this)closeModalAction()">
+  <div class="modal">
+    <div class="modal-head"><h3>Editar acción</h3><button class="btn ghost" onclick="closeModalAction()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Descripción</label><textarea id="ea-text" rows="3"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Fecha de revisión</label><input type="date" id="ea-date"></div>
+        <div class="field"><label>Estado</label>
+          <select id="ea-estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="en_curso">En curso</option>
+            <option value="completado">Completado</option>
+            <option value="bloqueado">Bloqueado</option>
+          </select></div>
+      </div>
+      <div class="field"><label>Responsable</label><input type="text" id="ea-resp"></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModalAction()">Cancelar</button><button class="btn primary" onclick="saveEditAction()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="saving-indicator" id="saving">Guardando...</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCBttbbkSteWw-kWE0GH46LlsXu1fvitY4",
+  authDomain: "proyectos-id-608f0.firebaseapp.com",
+  projectId: "proyectos-id-608f0",
+  storageBucket: "proyectos-id-608f0.firebasestorage.app",
+  messagingSenderId: "200175057154",
+  appId: "1:200175057154:web:4aeaeffc0099bd1199ea1b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window.loginGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    document.getElementById('login-error').textContent = 'Error al ingresar. Intentá de nuevo.';
+  }
+};
+window.logout = () => signOut(auth);
+
+let saveTimeout = null;
+function showSaving(){ const s=document.getElementById('saving'); s.classList.add('show'); clearTimeout(saveTimeout); saveTimeout=setTimeout(()=>s.classList.remove('show'),1500); }
+
+async function saveDB(){
+  showSaving();
+  try {
+    await setDoc(doc(db,'data','main'), { proyectos: window.DB.proyectos, desarrollos: window.DB.desarrollos });
+  } catch(e){ console.error('Error guardando:', e); }
+}
+window.saveDB = saveDB;
+
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    document.getElementById('user-name').textContent = user.displayName || user.email;
+    if(user.photoURL){ const img=document.getElementById('user-photo'); img.src=user.photoURL; img.style.display='block'; }
+
+    // Escuchar cambios en tiempo real
+    onSnapshot(doc(db,'data','main'), (snap) => {
+      if(snap.exists()){
+        const data = snap.data();
+        window.DB = { proyectos: data.proyectos||[], desarrollos: data.desarrollos||[] };
+      } else {
+        // Primera vez: cargar datos iniciales
+        window.DB = getInitialData();
+        saveDB();
+      }
+      renderDashboard();
+      const activeView = document.querySelector('.view.active');
+      if(activeView){
+        if(activeView.id==='view-proyectos') renderList('proy');
+        if(activeView.id==='view-desarrollos') renderList('dev');
+        if(activeView.id==='view-vencimientos') renderVencimientos();
+      }
+    });
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').classList.remove('visible');
+  }
+});
+</script>
+
+<!-- XLSX -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+// ── UTILS ────────────────────────────────────────────────────────────────
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+function uid(){ return '_'+Math.random().toString(36).slice(2,9); }
+function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+function dateStatus(s){
+  if(!s) return 'none';
+  const d=new Date(s); d.setHours(0,0,0,0);
+  const diff=(d-TODAY)/(1000*60*60*24);
+  if(diff<0) return 'overdue';
+  if(diff<=7) return 'soon';
+  return 'ok';
+}
+function estadoBadge(e){
+  const map={pendiente:'gray',en_curso:'blue',completado:'green',bloqueado:'red'};
+  const labels={pendiente:'pendiente',en_curso:'en curso',completado:'completado',bloqueado:'bloqueado'};
+  return `<span class="badge ${map[e]||'gray'}">${labels[e]||e}</span>`;
+}
+function progColor(p){ return p>=80?'var(--green)':p>=40?'var(--amber)':'var(--hint)'; }
+function makeAction(text,date='',estado='pendiente',responsable=''){
+  return {id:uid(),text,date,estado,responsable,done:false,children:[]};
+}
+
+// ── INITIAL DATA ──────────────────────────────────────────────────────────
+function getInitialData(){
+  return {
+    proyectos: [
+      {id:'p1',num:1,nombre:'Cambio Soldadora San Juan',tipo:'Traslado/Cambio',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Intercambio de Soldadora 881 de Pilar a San Juan','','en_curso'),
+        makeAction('Upgrade de PLCs por obsoletos','','pendiente'),
+        makeAction('Instalación de monitor WECAN','','pendiente'),
+      ]},
+      {id:'p2',num:2,nombre:'Formato 70 – Longwen 826',tipo:'Formato',estado:'en_curso',pg:70,inst:70,actions:[
+        makeAction('Corte de Hojalata y prueba de matriz ok','','completado'),
+        makeAction('Barnizado ok','','completado'),
+        makeAction('Arranque estimado 21-22/05','2025-05-22','en_curso','Producción'),
+      ]},
+      {id:'p3',num:4,nombre:'Impresora 610 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:40,inst:0,actions:[
+        makeAction('Relevamiento equipo mecánico y eléctrico','','completado'),
+        makeAction('Cotizaciones de reparaciones y repuestos','','en_curso','Compras'),
+        makeAction('Limpieza y arranque con fallas – definir plan','','pendiente'),
+      ]},
+      {id:'p4',num:5,nombre:'Barnizadora 601 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Relevamiento equipo mecánico y eléctrico','','en_curso'),
+        makeAction('Cotizaciones de reparaciones y repuestos','','pendiente','Compras'),
+        makeAction('Limpieza y arranque con fallas','','pendiente'),
+      ]},
+      {id:'p5',num:6,nombre:'ESTES – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:70,inst:90,actions:[
+        makeAction('Puesta en marcha y regulaciones','','completado'),
+        makeAction('Repuestos en fabricación','','en_curso'),
+        makeAction('Pruebas en TFS 0,16 DR8 impresas hojalata Perú JinTai','','en_curso'),
+      ]},
+      {id:'p6',num:7,nombre:'CEPEDA – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:50,inst:0,actions:[
+        makeAction('Cotización mejora corona y piñón','','en_curso'),
+        makeAction('Cotización matriz 0,16 DR8 1er OP','','en_curso','Compras'),
+        makeAction('Pruebas en TFS 0,18 impresa','','pendiente'),
+      ]},
+      {id:'p7',num:8,nombre:'ESTES – Cámara impresora 810',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Orden de compra emitida','','completado'),
+        makeAction('Preparación de muestras en hojas para enviar a China','','en_curso'),
+      ]},
+      {id:'p8',num:9,nombre:'881 – WECAN Monitor de soldadura',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Recepción de monitor','2025-05-22','pendiente','Logística'),
+        makeAction('Solicitud plan de trabajo montaje y puesta en marcha','','en_curso'),
+        makeAction('Condiciones de montaje 26/5 – disponibilidad técnicos','2025-05-26','pendiente','Técnica'),
+      ]},
+      {id:'p9',num:10,nombre:'Despaletizador Uriburu',tipo:'Compra',estado:'en_curso',pg:40,inst:0,actions:[
+        makeAction('Relevamiento de medidas','','completado'),
+        makeAction('Solicitud cotización – Costa Rica 26/4','','en_curso','Compras'),
+        makeAction('A la espera de la propuesta','','pendiente'),
+      ]},
+    ],
+    desarrollos: [
+      {id:'d1',num:1,nombre:'Bobinas TFS B960 0,18 – Tapas 68-76',tipo:'Prueba industrial',estado:'en_curso',pg:20,inst:50,actions:[
+        makeAction('Prueba Industrial INALPA 100% – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+        makeAction('Pruebas SWIFT 20% – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+        makeAction('Prueba industrial Uriburu 0% – Programado semana 18/05','2025-05-18','pendiente'),
+      ]},
+      {id:'d2',num:2,nombre:'Proyecto Latas 9 Libras SWIFT – A12 Chile',tipo:'Proyecto latas',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Entrega de muestras 06/04','','completado'),
+        makeAction('Envases Aguila – aprobación SENASA – en tratativas','','en_curso'),
+      ]},
+      {id:'d3',num:4,nombre:'Envase 68x32 Fondo Apilable SWIFT',tipo:'Envase',estado:'pendiente',pg:0,inst:0,actions:[
+        makeAction('En stand by','','pendiente'),
+        makeAction('Muestras en Comeca envases de Costa Rica','','pendiente'),
+      ]},
+      {id:'d4',num:5,nombre:'Easy Open 68 SWIFT (Tapas Chinas)',tipo:'Tapas',estado:'en_curso',pg:90,inst:100,actions:[
+        makeAction('Prueba Industrial 400 mil unidades – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+      ]},
+      {id:'d5',num:6,nombre:'Envases 76x95 necking con Easy Open – SWIFT',tipo:'Envases',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Envío muestras 76x95 y 76x82 + tapas EO76 6/4 – Envío ET','','completado'),
+        makeAction('Solicitud barnices BPANI – muestras a proveedores','','en_curso','Técnica'),
+        makeAction('Validación completa barnices en proceso y cliente','','pendiente'),
+      ]},
+      {id:'d6',num:7,nombre:'ARCOR – EO87 / Tps70 EPINSA / EO76 Tomate / TH63',tipo:'Tapas',estado:'en_curso',pg:50,inst:60,actions:[
+        {id:'a1d6',text:'EO87 – Solicitud 300 mil tapas prueba industrial',date:'',estado:'en_curso',responsable:'Comercial',done:false,children:[
+          makeAction('Confirmar disponibilidad de línea','','pendiente','Producción'),
+        ]},
+        makeAction('TF70 – 300 mil probadas – Falta ET firmada e informe','','en_curso','Comercial'),
+        makeAction('EO76 Tomate – prueba industrial – disponibilidad septiembre','','pendiente'),
+        makeAction('TH63 – Dimensiones OK – Falta enviar muestras con botón','','pendiente','Técnica'),
+      ]},
+      {id:'d7',num:8,nombre:'MARS – EO76 ETP y TFS',tipo:'Tapas',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('EO76 ETP – pruebas iniciales ok – Solicitud prueba industrial','','en_curso'),
+        makeAction('EO76 TFS – pruebas iniciales ok – Materiales libres cromo VI','','en_curso'),
+        makeAction('Confirmar que tapas sean BPANI','','pendiente','Técnica'),
+      ]},
+      {id:'d8',num:9,nombre:'A10 – A8 Chile validación',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Recepción de muestras 9/5','','completado'),
+        makeAction('Planificar pruebas en INALPA cierre con tapas Argentina','','pendiente'),
+        makeAction('Especificaciones corregidas – ANMAT aprobado','','completado'),
+      ]},
+      {id:'d9',num:10,nombre:'Tinplate Reduction – validación 57/52/65 en 0,18',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Formato 52x110 (REPELENTE FUYI) – Sin novedades SCJ Pilar','','pendiente'),
+        makeAction('Formato 65x100 en 0,18 – Campaña pospuesta a mayo','','pendiente'),
+        makeAction('Formatos 65x238/250/300 – Campaña pospuesta a mayo','','pendiente'),
+        makeAction('Domos 57 importados – Inician por Comercial 30/03','','en_curso','Comercial'),
+      ]},
+    ]
+  };
+}
+
+// ── FLAT ACTIONS ──────────────────────────────────────────────────────────
+function flatActions(items){
+  const result=[];
+  items.forEach(item=>{
+    (function walk(actions){
+      actions.forEach(a=>{
+        result.push({action:a,item});
+        if(a.children&&a.children.length) walk(a.children);
+      });
+    })(item.actions||[]);
+  });
+  return result;
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+let filterProy='todos', filterDev='todos', filterVenc='todos';
+
+window.showView = function(id, el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='dashboard') renderDashboard();
+  if(id==='proyectos') renderList('proy');
+  if(id==='desarrollos') renderList('dev');
+  if(id==='vencimientos') renderVencimientos();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function renderDashboard(){
+  if(!window.DB) return;
+  const allProj=[...window.DB.proyectos,...window.DB.desarrollos];
+  const allActions=flatActions(allProj);
+  const vencidas=allActions.filter(x=>!x.action.done&&dateStatus(x.action.date)==='overdue').length;
+  const proximas=allActions.filter(x=>!x.action.done&&dateStatus(x.action.date)==='soon').length;
+  document.getElementById('badge-venc').textContent=vencidas+proximas;
+  document.getElementById('kpi-grid').innerHTML=`
+    <div class="kpi blue"><div class="kpi-lbl">Proyectos</div><div class="kpi-val">${window.DB.proyectos.length}</div><div class="kpi-sub">${window.DB.proyectos.filter(p=>p.estado==='en_curso').length} en curso</div></div>
+    <div class="kpi teal"><div class="kpi-lbl">Desarrollos</div><div class="kpi-val">${window.DB.desarrollos.length}</div><div class="kpi-sub">${window.DB.desarrollos.filter(d=>d.estado==='en_curso').length} en curso</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Acciones vencidas</div><div class="kpi-val">${vencidas}</div><div class="kpi-sub">${proximas} próximas a vencer</div></div>
+    <div class="kpi green"><div class="kpi-lbl">Completados</div><div class="kpi-val">${allProj.filter(i=>i.estado==='completado').length}</div><div class="kpi-sub">de ${allProj.length} total</div></div>`;
+  const renderMini=(arr,el)=>{
+    if(!arr.length){el.innerHTML='<div class="empty">Sin datos</div>';return;}
+    el.innerHTML=arr.map(i=>`<div class="proj-row" onclick="openDetailFromDash('${i.id}')">
+      <span class="proj-num">${i.num}</span>
+      <div class="proj-info"><div class="proj-name">${i.nombre}</div><div class="proj-meta">${i.tipo}</div></div>
+      ${estadoBadge(i.estado)}
+      <div class="proj-progress"><div class="prog-label"><span>PG</span><span>${i.pg}%</span></div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${i.pg}%;background:${progColor(i.pg)}"></div></div></div>
+    </div>`).join('');
+  };
+  renderMini(window.DB.proyectos, document.getElementById('dash-proy'));
+  renderMini(window.DB.desarrollos, document.getElementById('dash-dev'));
+  const urgentes=allActions.filter(x=>!x.action.done&&(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon'))
+    .sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1).slice(0,8);
+  const dv=document.getElementById('dash-venc');
+  if(!urgentes.length){dv.innerHTML='<div class="empty">No hay acciones vencidas o próximas</div>';return;}
+  dv.innerHTML=urgentes.map(({action:a,item:i})=>{
+    const st=dateStatus(a.date);
+    return `<div class="overdue-item"><span class="action-date-tag ${st}">📅 ${fmtDate(a.date)}</span>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">${a.text}</div>
+    <div style="font-size:10px;color:var(--muted)">${i.nombre}${a.responsable?' · '+a.responsable:''}</div></div>
+    ${estadoBadge(a.estado)}</div>`;
+  }).join('');
+}
+window.renderDashboard=renderDashboard;
+
+// ── LIST ──────────────────────────────────────────────────────────────────
+function renderList(key){
+  if(!window.DB) return;
+  const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;
+  const flt=key==='proy'?filterProy:filterDev;
+  const estados=['todos','en_curso','pendiente','completado','bloqueado'];
+  const labels={todos:'Todos',en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};
+  document.getElementById('flt-'+key).innerHTML=estados.map(e=>
+    `<button class="flt ${flt===e?'on':''}" onclick="setFilter('${key}','${e}')">${labels[e]} (${e==='todos'?arr.length:arr.filter(i=>i.estado===e).length})</button>`
+  ).join('');
+  const filtered=flt==='todos'?arr:arr.filter(i=>i.estado===flt);
+  const listEl=document.getElementById('list-'+key);
+  if(!filtered.length){listEl.innerHTML='<div class="empty">Sin elementos</div>';return;}
+  listEl.innerHTML=filtered.map(item=>{
+    const pendActs=flatActions([item]).filter(x=>!x.action.done&&(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon')).length;
+    return `<div class="proj-row" onclick="openDetail('${key}','${item.id}')">
+      <span class="proj-num">${item.num}</span>
+      <div class="proj-info"><div class="proj-name">${item.nombre}</div><div class="proj-meta">${item.tipo} · ${(item.actions||[]).length} acciones</div></div>
+      ${estadoBadge(item.estado)}
+      <div class="proj-progress"><div class="prog-label"><span>PG</span><span>${item.pg}%</span></div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"></div></div></div>
+      ${pendActs>0?`<span class="badge amber">⚠ ${pendActs}</span>`:''}
+    </div>`;
+  }).join('');
+}
+window.setFilter=function(key,val){ if(key==='proy') filterProy=val; else filterDev=val; renderList(key); }
+
+// ── DETAIL ────────────────────────────────────────────────────────────────
+let currentDetail={key:null,id:null};
+window.openDetail=function(key,id){
+  currentDetail={key,id};
+  document.getElementById('list-'+key).style.display='none';
+  document.getElementById('flt-'+key).style.display='none';
+  document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='none';
+  document.getElementById('detail-'+key).classList.add('open');
+  renderDetail(key,id);
+}
+window.closeDetail=function(key){
+  document.getElementById('list-'+key).style.display='';
+  document.getElementById('flt-'+key).style.display='';
+  document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='';
+  document.getElementById('detail-'+key).classList.remove('open');
+  renderList(key);
+}
+function renderDetail(key,id){
+  const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;
+  const item=arr.find(x=>x.id===id); if(!item) return;
+  const label2=key==='proy'?'Instalación':'Pruebas';
+  document.getElementById('detail-'+key+'-body').innerHTML=`
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-head"><h2>${item.nombre}</h2>${estadoBadge(item.estado)}
+        <button class="btn sm" onclick="openEditItemModal('${key}','${id}')">✏️ Editar</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:14px">
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Tipo</div><div style="font-size:12px">${item.tipo}</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Proyecto General</div>
+          <div class="prog-bg" style="margin-top:6px"><div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${item.pg}%</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">${label2}</div>
+          <div class="prog-bg" style="margin-top:6px"><div class="prog-fill" style="width:${item.inst}%;background:${progColor(item.inst)}"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${item.inst}%</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Acciones</h2>
+        <button class="btn sm primary" onclick="addRootAction('${key}','${id}')">+ Nueva acción</button></div>
+      <div class="action-tree" id="tree-${id}"></div>
+    </div>`;
+  renderTree(item);
+}
+window.openDetailFromDash=function(id){
+  const isProy=window.DB.proyectos.find(p=>p.id===id);
+  if(isProy){ showView('proyectos',document.getElementById('nav-proyectos')); openDetail('proy',id); }
+  else { showView('desarrollos',document.getElementById('nav-desarrollos')); openDetail('dev',id); }
+}
+
+// ── TREE ──────────────────────────────────────────────────────────────────
+const expandState={};
+function renderTree(item){
+  const el=document.getElementById('tree-'+item.id); if(!el) return;
+  if(!(item.actions||[]).length){el.innerHTML='<div class="empty">Sin acciones. Agregá la primera.</div>';return;}
+  el.innerHTML=renderNodes(item.actions,item);
+}
+function renderNodes(actions,item){ return actions.map(a=>renderNode(a,item)).join(''); }
+function renderNode(a,item){
+  const hasChildren=a.children&&a.children.length>0;
+  const isOpen=expandState[a.id]!==false;
+  const st=dateStatus(a.date);
+  const dtClass=st==='overdue'?'overdue':st==='soon'?'soon':'';
+  const stateColors={pendiente:'var(--hint)',en_curso:'var(--blue)',completado:'var(--green)',bloqueado:'var(--red)'};
+  return `<div class="action-node">
+    <div class="action-row" style="border-left:2.5px solid ${stateColors[a.estado]||'var(--hint)'}">
+      <button class="action-toggle" onclick="toggleExpand('${a.id}','${item.id}')" ${!hasChildren?'style="visibility:hidden"':''}>${hasChildren&&isOpen?'▾':'▸'}</button>
+      <input type="checkbox" class="action-check" ${a.done?'checked':''} onchange="toggleDone('${a.id}','${item.id}')">
+      <div class="action-content">
+        <div class="action-text ${a.done?'done':''}">${a.text}</div>
+        <div class="action-dates">
+          ${a.date?`<span class="action-date-tag ${dtClass}">📅 Revisión: ${fmtDate(a.date)}</span>`:`<span class="action-date-tag" style="cursor:pointer" onclick="openEditActionModal('${a.id}','${item.id}')">+ Agregar fecha</span>`}
+          ${a.responsable?`<span class="action-date-tag">👤 ${a.responsable}</span>`:''}
+        </div>
+      </div>
+      <div class="action-row-btns">
+        <button class="btn ghost sm" onclick="openEditActionModal('${a.id}','${item.id}')">✏️ Editar</button>
+        <button class="btn ghost sm" onclick="showAddChildForm('${a.id}','${item.id}')">+ Sub-acción</button>
+        <button class="btn ghost sm" style="color:var(--red)" onclick="deleteAction('${a.id}','${item.id}')">🗑 Borrar</button>
+      </div>
+    </div>
+    <div id="addform-${a.id}" style="display:none;padding-left:22px;margin-top:3px"></div>
+    ${hasChildren&&isOpen?`<div class="action-indent">${renderNodes(a.children,item)}</div>`:''}
+  </div>`;
+}
+
+window.toggleExpand=function(aid,itemId){ expandState[aid]=expandState[aid]===false?true:false; rerenderTree(itemId); }
+window.toggleDone=function(aid,itemId){
+  const item=findItem(itemId); const a=findAction(item.actions,aid);
+  if(a){ a.done=!a.done; rerenderTree(itemId); window.saveDB(); }
+}
+function rerenderTree(itemId){ const item=findItem(itemId); if(item) renderTree(item); }
+function findItem(id){ return [...(window.DB.proyectos||[]),...(window.DB.desarrollos||[])].find(x=>x.id===id); }
+function findAction(actions,id){
+  for(const a of actions){
+    if(a.id===id) return a;
+    if(a.children){ const f=findAction(a.children,id); if(f) return f; }
+  }
+  return null;
+}
+function findParentArr(actions,id){
+  for(const a of actions){
+    if(a.children){
+      if(a.children.find(c=>c.id===id)) return a.children;
+      const f=findParentArr(a.children,id); if(f) return f;
+    }
+  }
+  return null;
+}
+
+window.addRootAction=function(key,itemId){
+  const item=findItem(itemId); if(!item) return;
+  const na=makeAction('Nueva acción');
+  item.actions.push(na);
+  rerenderTree(itemId);
+  openEditActionModal(na.id,itemId);
+}
+window.showAddChildForm=function(parentId,itemId){
+  const el=document.getElementById('addform-'+parentId); if(!el) return;
+  if(el.style.display!=='none'){el.style.display='none';el.innerHTML='';return;}
+  el.style.display='block';
+  el.innerHTML=`<div class="add-action-row">
+    <input class="add-action-input" id="child-txt-${parentId}" placeholder="Descripción de la sub-acción…" onkeydown="if(event.key==='Enter')saveChildAction('${parentId}','${itemId}')">
+    <input class="add-action-date" type="date" id="child-date-${parentId}">
+    <button class="btn sm primary" onclick="saveChildAction('${parentId}','${itemId}')">Agregar</button>
+    <button class="btn sm" onclick="document.getElementById('addform-${parentId}').style.display='none'">✕</button>
+  </div>`;
+  document.getElementById('child-txt-'+parentId).focus();
+}
+window.saveChildAction=function(parentId,itemId){
+  const txt=document.getElementById('child-txt-'+parentId)?.value.trim(); if(!txt) return;
+  const date=document.getElementById('child-date-'+parentId)?.value||'';
+  const item=findItem(itemId); const parent=findAction(item.actions,parentId);
+  if(!parent) return;
+  if(!parent.children) parent.children=[];
+  expandState[parentId]=true;
+  parent.children.push(makeAction(txt,date));
+  document.getElementById('addform-'+parentId).style.display='none';
+  rerenderTree(itemId); window.saveDB();
+}
+window.deleteAction=function(aid,itemId){
+  if(!confirm('¿Eliminar esta acción y todas sus sub-acciones?')) return;
+  const item=findItem(itemId);
+  const parentArr=findParentArr(item.actions,aid)||item.actions;
+  const idx=parentArr.findIndex(a=>a.id===aid);
+  if(idx>-1){ parentArr.splice(idx,1); rerenderTree(itemId); window.saveDB(); }
+}
+
+let editActionCtx={aid:null,itemId:null};
+window.openEditActionModal=function(aid,itemId){
+  editActionCtx={aid,itemId};
+  const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;
+  document.getElementById('ea-text').value=a.text;
+  document.getElementById('ea-date').value=a.date||'';
+  document.getElementById('ea-estado').value=a.estado||'pendiente';
+  document.getElementById('ea-resp').value=a.responsable||'';
+  document.getElementById('modal-action').classList.add('open');
+}
+window.closeModalAction=function(){ document.getElementById('modal-action').classList.remove('open'); }
+window.saveEditAction=function(){
+  const {aid,itemId}=editActionCtx;
+  const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;
+  a.text=document.getElementById('ea-text').value.trim()||a.text;
+  a.date=document.getElementById('ea-date').value;
+  a.estado=document.getElementById('ea-estado').value;
+  a.responsable=document.getElementById('ea-resp').value;
+  closeModalAction(); rerenderTree(itemId); window.saveDB();
+}
+
+// ── VENCIMIENTOS ──────────────────────────────────────────────────────────
+function renderVencimientos(){
+  if(!window.DB) return;
+  const allActions=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=>x.action.date&&!x.action.done);
+  const filters=['todos','overdue','soon','ok'];
+  const labels={todos:'Todos',overdue:'Vencidos',soon:'Esta semana',ok:'Futuros'};
+  document.getElementById('flt-venc').innerHTML=filters.map(f=>
+    `<button class="flt ${filterVenc===f?'on':''}" onclick="setFilterVenc('${f}')">${labels[f]} (${f==='todos'?allActions.length:allActions.filter(x=>dateStatus(x.action.date)===f).length})</button>`
+  ).join('');
+  const filtered=filterVenc==='todos'?allActions:allActions.filter(x=>dateStatus(x.action.date)===filterVenc);
+  filtered.sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1);
+  const el=document.getElementById('list-venc');
+  if(!filtered.length){el.innerHTML='<div class="empty">Sin acciones con fecha en esta vista</div>';return;}
+  el.innerHTML=filtered.map(({action:a,item:i})=>{
+    const st=dateStatus(a.date);
+    return `<div class="overdue-item" style="cursor:pointer" onclick="openDetailFromDash('${i.id}')">
+      <span class="action-date-tag ${st}">📅 ${fmtDate(a.date)}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">${a.text}</div>
+      <div style="font-size:10px;color:var(--muted)">${i.nombre}${a.responsable?' · '+a.responsable:''}</div></div>
+      ${estadoBadge(a.estado)}
+    </div>`;
+  }).join('');
+}
+window.setFilterVenc=function(v){ filterVenc=v; renderVencimientos(); }
+
+// ── NEW/EDIT ITEM ─────────────────────────────────────────────────────────
+let newItemCtx={type:null,editId:null};
+window.openNewItemModal=function(type){ newItemCtx={type,editId:null}; document.getElementById('modal-item-title').textContent=type==='proyecto'?'Nuevo proyecto':'Nuevo desarrollo'; buildItemBody(type,null); document.getElementById('modal-item').classList.add('open'); }
+window.openEditItemModal=function(key,id){ const item=findItem(id); if(!item) return; newItemCtx={type:key==='proy'?'proyecto':'desarrollo',editId:id}; document.getElementById('modal-item-title').textContent='Editar'; buildItemBody(newItemCtx.type,item); document.getElementById('modal-item').classList.add('open'); }
+function buildItemBody(type,item){
+  const label2=type==='proyecto'?'Instalación':'Pruebas industriales';
+  document.getElementById('modal-item-body').innerHTML=`
+    <div class="field"><label>Nombre</label><input type="text" id="fi-nombre" value="${item?item.nombre:''}"></div>
+    <div class="field-row">
+      <div class="field"><label>Tipo</label><input type="text" id="fi-tipo" value="${item?item.tipo:''}" placeholder="ej: Compra, Traslado…"></div>
+      <div class="field"><label>Estado</label><select id="fi-estado">
+        <option value="en_curso" ${item?.estado==='en_curso'?'selected':''}>En curso</option>
+        <option value="pendiente" ${item?.estado==='pendiente'?'selected':''}>Pendiente</option>
+        <option value="completado" ${item?.estado==='completado'?'selected':''}>Completado</option>
+        <option value="bloqueado" ${item?.estado==='bloqueado'?'selected':''}>Bloqueado</option>
+      </select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>% Proyecto General</label><input type="number" id="fi-pg" value="${item?item.pg:0}" min="0" max="100"></div>
+      <div class="field"><label>% ${label2}</label><input type="number" id="fi-inst" value="${item?item.inst:0}" min="0" max="100"></div>
+    </div>`;
+}
+window.closeModalItem=function(){ document.getElementById('modal-item').classList.remove('open'); }
+window.saveNewItem=function(){
+  const nombre=document.getElementById('fi-nombre').value.trim(); if(!nombre){alert('Ingresá el nombre');return;}
+  const tipo=document.getElementById('fi-tipo').value;
+  const estado=document.getElementById('fi-estado').value;
+  const pg=parseInt(document.getElementById('fi-pg').value)||0;
+  const inst=parseInt(document.getElementById('fi-inst').value)||0;
+  const {type,editId}=newItemCtx;
+  const arr=type==='proyecto'?window.DB.proyectos:window.DB.desarrollos;
+  if(editId){
+    const item=arr.find(x=>x.id===editId);
+    if(item) Object.assign(item,{nombre,tipo,estado,pg,inst});
+    closeModalItem();
+    const key=type==='proyecto'?'proy':'dev';
+    renderDetail(key,editId);
+  } else {
+    const nums=arr.map(x=>x.num); const num=nums.length?Math.max(...nums)+1:1;
+    arr.push({id:uid(),num,nombre,tipo,estado,pg,inst,actions:[]});
+    closeModalItem();
+    renderList(type==='proyecto'?'proy':'dev');
+  }
+  window.saveDB();
+}
+
+// ── EXPORT EXCEL ──────────────────────────────────────────────────────────
+window.exportExcel=function(){
+  if(typeof XLSX==='undefined'){alert('Cargando librería, intentá en segundos...');return;}
+  if(!window.DB){alert('Sin datos');return;}
+  const wb=XLSX.utils.book_new();
+  const elbl={en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};
+  function walkRows(actions,item,rows,depth){
+    actions.forEach(a=>{
+      const prefix='  '.repeat(depth)+(depth>0?'↳ ':'');
+      rows.push([depth===0?item.num:'',depth===0?item.nombre:'',depth===0?item.tipo:'',depth===0?(elbl[item.estado]||item.estado):'',depth===0?item.pg+'%':'',depth===0?item.inst+'%':'','Nivel '+(depth+1),prefix+a.text,elbl[a.estado]||a.estado||'',a.date?fmtDate(a.date):'',a.responsable||'',a.done?'Sí':'No']);
+      if(a.children&&a.children.length) walkRows(a.children,item,rows,depth+1);
+    });
+  }
+  const hdr=['#','Nombre','Tipo','Estado','% PG','% Inst/Pruebas','Nivel','Acción','Estado acción','Fecha revisión','Responsable','Completada'];
+  const rp=[hdr]; window.DB.proyectos.forEach(i=>{ if(!i.actions.length) rp.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rp,0); });
+  const wp=XLSX.utils.aoa_to_sheet(rp); wp['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wp,'Proyectos');
+  const rd=[hdr]; window.DB.desarrollos.forEach(i=>{ if(!i.actions.length) rd.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rd,0); });
+  const wd=XLSX.utils.aoa_to_sheet(rd); wd['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wd,'Desarrollos');
+  const allF=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=>x.action.date);
+  allF.sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1);
+  const rv=[['Proyecto/Desarrollo','Tipo','Acción','Estado','Fecha revisión','Responsable','Completada','Alerta']];
+  allF.forEach(({action:a,item:i})=>{ const st=dateStatus(a.date); rv.push([i.nombre,i.tipo,a.text,elbl[a.estado]||a.estado||'',fmtDate(a.date),a.responsable||'',a.done?'Sí':'No',st==='overdue'?'VENCIDA':st==='soon'?'Esta semana':'OK']); });
+  const wv=XLSX.utils.aoa_to_sheet(rv); wv['!cols']=[30,16,52,12,14,16,10,12].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wv,'Vencimientos');
+  const allI=[...window.DB.proyectos,...window.DB.desarrollos]; const allA=flatActions(allI);
+  const rr=[['RESUMEN – COMECA ARG / PROYECTOS I&D 2026'],['Exportado:',new Date().toLocaleDateString('es-AR')],[],['ÍTEM','VALOR'],['Proyectos activos',window.DB.proyectos.length],['Desarrollos activos',window.DB.desarrollos.length],['Total',allI.length],['En curso',allI.filter(i=>i.estado==='en_curso').length],['Completados',allI.filter(i=>i.estado==='completado').length],['Pendientes/Bloqueados',allI.filter(i=>i.estado==='pendiente'||i.estado==='bloqueado').length],[],['Total acciones',allA.length],['Completadas',allA.filter(x=>x.action.done).length],['Con fecha de revisión',allA.filter(x=>x.action.date).length],['Vencidas',allA.filter(x=>!x.action.done&&dateStatus(x.action.date)==='overdue').length],['Próximas (7 días)',allA.filter(x=>!x.action.done&&dateStatus(x.action.date)==='soon').length]];
+  const wr=XLSX.utils.aoa_to_sheet(rr); wr['!cols']=[{wch:32},{wch:16}]; XLSX.utils.book_append_sheet(wb,wr,'Resumen');
+  XLSX.writeFile(wb,'ProyectosID_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+</script>
 </body>
 </html>
