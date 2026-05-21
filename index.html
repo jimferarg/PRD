@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyectos I&D – Grupo Comeca</title>
+<style>
+:root {
+  --bg: #f4f3ef;
+  --surface: #ffffff;
+  --surface2: #f9f8f5;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.16);
+  --text: #1a1917;
+  --muted: #6e6d68;
+  --hint: #a09f99;
+  --blue: #185FA5; --blue-bg: #E6F1FB; --blue-txt: #0C447C;
+  --green: #3B6D11; --green-bg: #EAF3DE; --green-txt: #27500A;
+  --amber: #854F0B; --amber-bg: #FAEEDA; --amber-txt: #633806;
+  --red: #A32D2D; --red-bg: #FCEBEB; --red-txt: #791F1F;
+  --gray-bg: #F1EFE8; --gray-txt: #444441;
+  --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-txt: #085041;
+  --r: 8px; --r2: 5px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#1b1b19;--surface:#242421;--surface2:#2c2c29;
+    --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.17);
+    --text:#e6e4dc;--muted:#9e9d97;--hint:#6a6965;
+    --blue:#378ADD;--blue-bg:#0c2a45;--blue-txt:#B5D4F4;
+    --green:#639922;--green-bg:#17340a;--green-txt:#C0DD97;
+    --amber:#BA7517;--amber-bg:#33200a;--amber-txt:#FAC775;
+    --red:#E24B4A;--red-bg:#2c1212;--red-txt:#F7C1C1;
+    --gray-bg:#2c2c2a;--gray-txt:#D3D1C7;
+    --teal:#1D9E75;--teal-bg:#04251c;--teal-txt:#9FE1CB;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);}
+.login-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:40px;width:340px;text-align:center;}
+.login-card .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:3px 8px;border-radius:3px;letter-spacing:.05em;display:inline-block;margin-bottom:20px;}
+.login-card h2{font-size:16px;font-weight:500;margin-bottom:6px;}
+.login-card p{font-size:12px;color:var(--muted);margin-bottom:28px;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:10px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;font-size:13px;font-weight:500;}
+.btn-google:hover{background:var(--bg);}
+.btn-google img{width:18px;height:18px;}
+.login-error{font-size:11px;color:var(--red-txt);margin-top:12px;}
+
+/* APP */
+#app{display:none;}
+#app.visible{display:grid;grid-template-columns:220px 1fr;grid-template-rows:48px 1fr;height:100vh;overflow:hidden;}
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:0.5px solid var(--border2);display:flex;align-items:center;padding:0 18px;gap:14px;}
+.topbar .logo{font-size:11px;font-weight:600;background:var(--text);color:var(--surface);padding:2px 7px;border-radius:3px;letter-spacing:.05em;}
+.topbar h1{font-size:14px;font-weight:500;}
+.topbar .spacer{flex:1;}
+.topbar .user-info{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.topbar .user-info img{width:22px;height:22px;border-radius:50%;}
+
+.sidebar{background:var(--surface);border-right:0.5px solid var(--border);overflow-y:auto;padding:10px 0;}
+.sidebar-section{padding:4px 12px;font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.06em;margin-top:10px;margin-bottom:2px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--muted);transition:background .12s,color .12s;}
+.nav-item:hover{background:var(--bg);color:var(--text);}
+.nav-item.active{background:var(--bg);color:var(--text);font-weight:500;border-left:2px solid var(--text);}
+.nav-badge{margin-left:auto;font-size:10px;background:var(--amber-bg);color:var(--amber-txt);padding:1px 6px;border-radius:10px;}
+.nav-logout{margin-top:auto;border-top:0.5px solid var(--border);padding-top:8px;margin-top:12px;}
+
+.main{overflow-y:auto;padding:20px 24px;}
+.view{display:none;} .view.active{display:block;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);padding:14px 16px;}
+.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
+.kpi-val{font-size:28px;font-weight:500;line-height:1;}
+.kpi-sub{font-size:10px;color:var(--hint);margin-top:3px;}
+.kpi.blue{border-left:3px solid var(--blue);}
+.kpi.green{border-left:3px solid var(--green);}
+.kpi.amber{border-left:3px solid var(--amber);}
+.kpi.red{border-left:3px solid var(--red);}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:14px;}
+.card-head{padding:10px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;}
+.card-head h2{font-size:13px;font-weight:500;flex:1;}
+
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-head h2{font-size:15px;font-weight:500;}
+
+.btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:6px 12px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--surface);color:var(--text);cursor:pointer;}
+.btn:hover{background:var(--bg);}
+.btn.primary{background:var(--text);color:var(--surface);border-color:var(--text);}
+.btn.primary:hover{opacity:.85;}
+.btn.sm{padding:3px 8px;font-size:11px;}
+.btn.ghost{border:none;background:none;color:var(--muted);padding:3px 6px;}
+.btn.ghost:hover{background:var(--bg);color:var(--text);}
+
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;white-space:nowrap;}
+.badge.blue{background:var(--blue-bg);color:var(--blue-txt);}
+.badge.green{background:var(--green-bg);color:var(--green-txt);}
+.badge.amber{background:var(--amber-bg);color:var(--amber-txt);}
+.badge.red{background:var(--red-bg);color:var(--red-txt);}
+.badge.gray{background:var(--gray-bg);color:var(--gray-txt);}
+.badge.teal{background:var(--teal-bg);color:var(--teal-txt);}
+
+.proj-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background .1s;}
+.proj-row:last-child{border-bottom:none;}
+.proj-row:hover{background:var(--surface2);}
+.proj-num{font-size:10px;color:var(--hint);width:20px;flex-shrink:0;text-align:right;}
+.proj-info{flex:1;min-width:0;}
+.proj-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proj-meta{font-size:10px;color:var(--muted);margin-top:1px;}
+.proj-progress{width:80px;flex-shrink:0;}
+.prog-bg{height:4px;background:var(--border2);border-radius:2px;margin-top:3px;}
+.prog-fill{height:100%;border-radius:2px;}
+
+.back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:14px;}
+.back:hover{color:var(--text);}
+.detail-panel{display:none;} .detail-panel.open{display:block;}
+
+.action-tree{padding:12px 14px;}
+.action-node{margin-bottom:4px;}
+.action-row{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:var(--r2);border:0.5px solid var(--border);background:var(--surface2);position:relative;}
+.action-indent{padding-left:22px;border-left:1.5px solid var(--border2);margin-left:12px;margin-top:3px;}
+.action-toggle{background:none;border:none;cursor:pointer;color:var(--muted);padding:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:12px;}
+.action-check{width:14px;height:14px;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--green);}
+.action-content{flex:1;min-width:0;}
+.action-text{font-size:12px;line-height:1.4;}
+.action-text.done{text-decoration:line-through;color:var(--hint);}
+.action-dates{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;}
+.action-date-tag{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:1px 6px;border-radius:3px;background:var(--bg);color:var(--muted);border:0.5px solid var(--border2);}
+.action-date-tag.overdue{background:var(--red-bg);color:var(--red-txt);border-color:var(--red);}
+.action-date-tag.soon{background:var(--amber-bg);color:var(--amber-txt);border-color:var(--amber);}
+.action-row-btns{display:flex;gap:2px;flex-shrink:0;}
+
+.add-action-row{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:4px;}
+.add-action-input{flex:1;font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);}
+.add-action-input:focus{outline:none;border-color:var(--blue);}
+.add-action-date{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:130px;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--r);width:480px;max-width:96vw;max-height:88vh;overflow-y:auto;border:0.5px solid var(--border2);}
+.modal-head{padding:14px 18px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:14px;font-weight:500;}
+.modal-body{padding:18px;display:flex;flex-direction:column;gap:12px;}
+.modal-foot{padding:12px 18px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+.field input,.field select,.field textarea{font-size:12px;padding:7px 9px;border:0.5px solid var(--border2);border-radius:var(--r2);background:var(--bg);color:var(--text);width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:60px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.flt{font-size:11px;padding:3px 10px;border:0.5px solid var(--border2);border-radius:20px;background:var(--surface);color:var(--muted);cursor:pointer;}
+.flt.on{background:var(--text);color:var(--surface);border-color:var(--text);}
+
+.overdue-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:0.5px solid var(--border);}
+.overdue-item:last-child{border-bottom:none;}
+.empty{text-align:center;padding:32px;color:var(--hint);font-size:12px;}
+.prog-wrap{width:100%;}
+.prog-label{font-size:10px;color:var(--muted);display:flex;justify-content:space-between;}
+
+.saving-indicator{position:fixed;bottom:16px;right:16px;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 14px;font-size:11px;color:var(--muted);display:none;z-index:300;}
+.saving-indicator.show{display:block;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <span class="logo">Proyectos I&D</span>
+    <h2>Proyectos I&D</h2>
+    <p>Seguimiento de proyectos y desarrollos 2026</p>
+    <button class="btn-google" onclick="loginGoogle()">
+      <img src="https://www.google.com/favicon.ico"> Ingresar con Google
+    </button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <span class="logo">Proyectos I&D</span>
+    <h1>Proyectos I&D 2026</h1>
+    <span class="spacer"></span>
+    <div class="user-info">
+      <img id="user-photo" src="" style="display:none">
+      <span id="user-name"></span>
+      <button class="btn sm" onclick="exportExcel()" style="margin-left:8px">⬇ Excel</button>
+      <button class="btn sm" onclick="logout()" style="margin-left:4px">Salir</button>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-section">Vistas</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="showView('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-item" id="nav-proyectos" onclick="showView('proyectos',this)">🔧 Proyectos</div>
+    <div class="nav-item" id="nav-desarrollos" onclick="showView('desarrollos',this)">🧪 Desarrollos</div>
+    <div class="nav-item" id="nav-vencimientos" onclick="showView('vencimientos',this)">📅 Vencimientos <span class="nav-badge" id="badge-venc">0</span></div>
+  </div>
+  <div class="main" id="main">
+    <div class="view active" id="view-dashboard">
+      <div class="sec-head"><h2>Dashboard</h2></div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card"><div class="card-head"><h2>Proyectos</h2></div><div id="dash-proy"></div></div>
+        <div class="card"><div class="card-head"><h2>Desarrollos</h2></div><div id="dash-dev"></div></div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="card-head"><h2>⚠️ Acciones vencidas o próximas</h2></div>
+        <div id="dash-venc"></div>
+      </div>
+    </div>
+    <div class="view" id="view-proyectos">
+      <div class="sec-head"><h2>Proyectos</h2><button class="btn primary" onclick="openNewItemModal('proyecto')">+ Nuevo</button></div>
+      <div class="filters" id="flt-proy"></div>
+      <div class="card" id="list-proy"></div>
+      <div class="detail-panel" id="detail-proy">
+        <div class="back" onclick="closeDetail('proy')">← Volver a proyectos</div>
+        <div id="detail-proy-body"></div>
+      </div>
+    </div>
+    <div class="view" id="view-desarrollos">
+      <div class="sec-head"><h2>Desarrollos</h2><button class="btn primary" onclick="openNewItemModal('desarrollo')">+ Nuevo</button></div>
+      <div class="filters" id="flt-dev"></div>
+      <div class="card" id="list-dev"></div>
+      <div class="detail-panel" id="detail-dev">
+        <div class="back" onclick="closeDetail('dev')">← Volver a desarrollos</div>
+        <div id="detail-dev-body"></div>
+      </div>
+    </div>
+    <div class="view" id="view-vencimientos">
+      <div class="sec-head"><h2>Acciones con fecha de revisión</h2></div>
+      <div class="filters" id="flt-venc"></div>
+      <div class="card" id="list-venc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ITEM -->
+<div class="modal-bg" id="modal-item" onclick="if(event.target===this)closeModalItem()">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modal-item-title">Nuevo proyecto</h3><button class="btn ghost" onclick="closeModalItem()">✕</button></div>
+    <div class="modal-body" id="modal-item-body"></div>
+    <div class="modal-foot"><button class="btn" onclick="closeModalItem()">Cancelar</button><button class="btn primary" onclick="saveNewItem()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- MODAL ACCION -->
+<div class="modal-bg" id="modal-action" onclick="if(event.target===this)closeModalAction()">
+  <div class="modal">
+    <div class="modal-head"><h3>Editar acción</h3><button class="btn ghost" onclick="closeModalAction()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Descripción</label><textarea id="ea-text" rows="3"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Fecha de revisión</label><input type="date" id="ea-date"></div>
+        <div class="field"><label>Estado</label>
+          <select id="ea-estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="en_curso">En curso</option>
+            <option value="completado">Completado</option>
+            <option value="bloqueado">Bloqueado</option>
+          </select></div>
+      </div>
+      <div class="field"><label>Responsable</label><input type="text" id="ea-resp"></div>
+    </div>
+    <div class="modal-foot"><button class="btn" onclick="closeModalAction()">Cancelar</button><button class="btn primary" onclick="saveEditAction()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="saving-indicator" id="saving">Guardando...</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCBttbbkSteWw-kWE0GH46LlsXu1fvitY4",
+  authDomain: "proyectos-id-608f0.firebaseapp.com",
+  projectId: "proyectos-id-608f0",
+  storageBucket: "proyectos-id-608f0.firebasestorage.app",
+  messagingSenderId: "200175057154",
+  appId: "1:200175057154:web:4aeaeffc0099bd1199ea1b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window.loginGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    document.getElementById('login-error').textContent = 'Error al ingresar. Intentá de nuevo.';
+  }
+};
+window.logout = () => signOut(auth);
+
+let saveTimeout = null;
+function showSaving(){ const s=document.getElementById('saving'); s.classList.add('show'); clearTimeout(saveTimeout); saveTimeout=setTimeout(()=>s.classList.remove('show'),1500); }
+
+async function saveDB(){
+  showSaving();
+  try {
+    await setDoc(doc(db,'data','main'), { proyectos: window.DB.proyectos, desarrollos: window.DB.desarrollos });
+  } catch(e){ console.error('Error guardando:', e); }
+}
+window.saveDB = saveDB;
+
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').classList.add('visible');
+    document.getElementById('user-name').textContent = user.displayName || user.email;
+    if(user.photoURL){ const img=document.getElementById('user-photo'); img.src=user.photoURL; img.style.display='block'; }
+
+    // Escuchar cambios en tiempo real
+    onSnapshot(doc(db,'data','main'), (snap) => {
+      if(snap.exists()){
+        const data = snap.data();
+        window.DB = { proyectos: data.proyectos||[], desarrollos: data.desarrollos||[] };
+      } else {
+        // Primera vez: cargar datos iniciales
+        window.DB = getInitialData();
+        saveDB();
+      }
+      renderDashboard();
+      const activeView = document.querySelector('.view.active');
+      if(activeView){
+        if(activeView.id==='view-proyectos') renderList('proy');
+        if(activeView.id==='view-desarrollos') renderList('dev');
+        if(activeView.id==='view-vencimientos') renderVencimientos();
+      }
+    });
+  } else {
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('app').classList.remove('visible');
+  }
+});
+</script>
+
+<!-- XLSX -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+// ── UTILS ────────────────────────────────────────────────────────────────
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+function uid(){ return '_'+Math.random().toString(36).slice(2,9); }
+function fmtDate(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return `${d}/${m}/${y}`; }
+function dateStatus(s){
+  if(!s) return 'none';
+  const d=new Date(s); d.setHours(0,0,0,0);
+  const diff=(d-TODAY)/(1000*60*60*24);
+  if(diff<0) return 'overdue';
+  if(diff<=7) return 'soon';
+  return 'ok';
+}
+function estadoBadge(e){
+  const map={pendiente:'gray',en_curso:'blue',completado:'green',bloqueado:'red'};
+  const labels={pendiente:'pendiente',en_curso:'en curso',completado:'completado',bloqueado:'bloqueado'};
+  return `<span class="badge ${map[e]||'gray'}">${labels[e]||e}</span>`;
+}
+function progColor(p){ return p>=80?'var(--green)':p>=40?'var(--amber)':'var(--hint)'; }
+function makeAction(text,date='',estado='pendiente',responsable=''){
+  return {id:uid(),text,date,estado,responsable,done:false,children:[]};
+}
+
+// ── INITIAL DATA ──────────────────────────────────────────────────────────
+function getInitialData(){
+  return {
+    proyectos: [
+      {id:'p1',num:1,nombre:'Cambio Soldadora San Juan',tipo:'Traslado/Cambio',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Intercambio de Soldadora 881 de Pilar a San Juan','','en_curso'),
+        makeAction('Upgrade de PLCs por obsoletos','','pendiente'),
+        makeAction('Instalación de monitor WECAN','','pendiente'),
+      ]},
+      {id:'p2',num:2,nombre:'Formato 70 – Longwen 826',tipo:'Formato',estado:'en_curso',pg:70,inst:70,actions:[
+        makeAction('Corte de Hojalata y prueba de matriz ok','','completado'),
+        makeAction('Barnizado ok','','completado'),
+        makeAction('Arranque estimado 21-22/05','2025-05-22','en_curso','Producción'),
+      ]},
+      {id:'p3',num:4,nombre:'Impresora 610 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:40,inst:0,actions:[
+        makeAction('Relevamiento equipo mecánico y eléctrico','','completado'),
+        makeAction('Cotizaciones de reparaciones y repuestos','','en_curso','Compras'),
+        makeAction('Limpieza y arranque con fallas – definir plan','','pendiente'),
+      ]},
+      {id:'p4',num:5,nombre:'Barnizadora 601 – Traslado Avellaneda',tipo:'Traslado/Cambio',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Relevamiento equipo mecánico y eléctrico','','en_curso'),
+        makeAction('Cotizaciones de reparaciones y repuestos','','pendiente','Compras'),
+        makeAction('Limpieza y arranque con fallas','','pendiente'),
+      ]},
+      {id:'p5',num:6,nombre:'ESTES – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:70,inst:90,actions:[
+        makeAction('Puesta en marcha y regulaciones','','completado'),
+        makeAction('Repuestos en fabricación','','en_curso'),
+        makeAction('Pruebas en TFS 0,16 DR8 impresas hojalata Perú JinTai','','en_curso'),
+      ]},
+      {id:'p6',num:7,nombre:'CEPEDA – Prensa embutido Avellaneda',tipo:'Instalación',estado:'en_curso',pg:50,inst:0,actions:[
+        makeAction('Cotización mejora corona y piñón','','en_curso'),
+        makeAction('Cotización matriz 0,16 DR8 1er OP','','en_curso','Compras'),
+        makeAction('Pruebas en TFS 0,18 impresa','','pendiente'),
+      ]},
+      {id:'p7',num:8,nombre:'ESTES – Cámara impresora 810',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Orden de compra emitida','','completado'),
+        makeAction('Preparación de muestras en hojas para enviar a China','','en_curso'),
+      ]},
+      {id:'p8',num:9,nombre:'881 – WECAN Monitor de soldadura',tipo:'Compra',estado:'en_curso',pg:30,inst:0,actions:[
+        makeAction('Recepción de monitor','2025-05-22','pendiente','Logística'),
+        makeAction('Solicitud plan de trabajo montaje y puesta en marcha','','en_curso'),
+        makeAction('Condiciones de montaje 26/5 – disponibilidad técnicos','2025-05-26','pendiente','Técnica'),
+      ]},
+      {id:'p9',num:10,nombre:'Despaletizador Uriburu',tipo:'Compra',estado:'en_curso',pg:40,inst:0,actions:[
+        makeAction('Relevamiento de medidas','','completado'),
+        makeAction('Solicitud cotización – Costa Rica 26/4','','en_curso','Compras'),
+        makeAction('A la espera de la propuesta','','pendiente'),
+      ]},
+    ],
+    desarrollos: [
+      {id:'d1',num:1,nombre:'Bobinas TFS B960 0,18 – Tapas 68-76',tipo:'Prueba industrial',estado:'en_curso',pg:20,inst:50,actions:[
+        makeAction('Prueba Industrial INALPA 100% – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+        makeAction('Pruebas SWIFT 20% – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+        makeAction('Prueba industrial Uriburu 0% – Programado semana 18/05','2025-05-18','pendiente'),
+      ]},
+      {id:'d2',num:2,nombre:'Proyecto Latas 9 Libras SWIFT – A12 Chile',tipo:'Proyecto latas',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Entrega de muestras 06/04','','completado'),
+        makeAction('Envases Aguila – aprobación SENASA – en tratativas','','en_curso'),
+      ]},
+      {id:'d3',num:4,nombre:'Envase 68x32 Fondo Apilable SWIFT',tipo:'Envase',estado:'pendiente',pg:0,inst:0,actions:[
+        makeAction('En stand by','','pendiente'),
+        makeAction('Muestras en Comeca envases de Costa Rica','','pendiente'),
+      ]},
+      {id:'d4',num:5,nombre:'Easy Open 68 SWIFT (Tapas Chinas)',tipo:'Tapas',estado:'en_curso',pg:90,inst:100,actions:[
+        makeAction('Prueba Industrial 400 mil unidades – Resultados ok – Falta firma ET','','en_curso','Comercial'),
+      ]},
+      {id:'d5',num:6,nombre:'Envases 76x95 necking con Easy Open – SWIFT',tipo:'Envases',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Envío muestras 76x95 y 76x82 + tapas EO76 6/4 – Envío ET','','completado'),
+        makeAction('Solicitud barnices BPANI – muestras a proveedores','','en_curso','Técnica'),
+        makeAction('Validación completa barnices en proceso y cliente','','pendiente'),
+      ]},
+      {id:'d6',num:7,nombre:'ARCOR – EO87 / Tps70 EPINSA / EO76 Tomate / TH63',tipo:'Tapas',estado:'en_curso',pg:50,inst:60,actions:[
+        {id:'a1d6',text:'EO87 – Solicitud 300 mil tapas prueba industrial',date:'',estado:'en_curso',responsable:'Comercial',done:false,children:[
+          makeAction('Confirmar disponibilidad de línea','','pendiente','Producción'),
+        ]},
+        makeAction('TF70 – 300 mil probadas – Falta ET firmada e informe','','en_curso','Comercial'),
+        makeAction('EO76 Tomate – prueba industrial – disponibilidad septiembre','','pendiente'),
+        makeAction('TH63 – Dimensiones OK – Falta enviar muestras con botón','','pendiente','Técnica'),
+      ]},
+      {id:'d7',num:8,nombre:'MARS – EO76 ETP y TFS',tipo:'Tapas',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('EO76 ETP – pruebas iniciales ok – Solicitud prueba industrial','','en_curso'),
+        makeAction('EO76 TFS – pruebas iniciales ok – Materiales libres cromo VI','','en_curso'),
+        makeAction('Confirmar que tapas sean BPANI','','pendiente','Técnica'),
+      ]},
+      {id:'d8',num:9,nombre:'A10 – A8 Chile validación',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Recepción de muestras 9/5','','completado'),
+        makeAction('Planificar pruebas en INALPA cierre con tapas Argentina','','pendiente'),
+        makeAction('Especificaciones corregidas – ANMAT aprobado','','completado'),
+      ]},
+      {id:'d9',num:10,nombre:'Tinplate Reduction – validación 57/52/65 en 0,18',tipo:'Validación',estado:'en_curso',pg:20,inst:0,actions:[
+        makeAction('Formato 52x110 (REPELENTE FUYI) – Sin novedades SCJ Pilar','','pendiente'),
+        makeAction('Formato 65x100 en 0,18 – Campaña pospuesta a mayo','','pendiente'),
+        makeAction('Formatos 65x238/250/300 – Campaña pospuesta a mayo','','pendiente'),
+        makeAction('Domos 57 importados – Inician por Comercial 30/03','','en_curso','Comercial'),
+      ]},
+    ]
+  };
+}
+
+// ── FLAT ACTIONS ──────────────────────────────────────────────────────────
+function flatActions(items){
+  const result=[];
+  items.forEach(item=>{
+    (function walk(actions){
+      actions.forEach(a=>{
+        result.push({action:a,item});
+        if(a.children&&a.children.length) walk(a.children);
+      });
+    })(item.actions||[]);
+  });
+  return result;
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+let filterProy='todos', filterDev='todos', filterVenc='todos';
+
+window.showView = function(id, el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  el.classList.add('active');
+  if(id==='dashboard') renderDashboard();
+  if(id==='proyectos') renderList('proy');
+  if(id==='desarrollos') renderList('dev');
+  if(id==='vencimientos') renderVencimientos();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function renderDashboard(){
+  if(!window.DB) return;
+  const allProj=[...window.DB.proyectos,...window.DB.desarrollos];
+  const allActions=flatActions(allProj);
+  const vencidas=allActions.filter(x=>!x.action.done&&dateStatus(x.action.date)==='overdue').length;
+  const proximas=allActions.filter(x=>!x.action.done&&dateStatus(x.action.date)==='soon').length;
+  document.getElementById('badge-venc').textContent=vencidas+proximas;
+  document.getElementById('kpi-grid').innerHTML=`
+    <div class="kpi blue"><div class="kpi-lbl">Proyectos</div><div class="kpi-val">${window.DB.proyectos.length}</div><div class="kpi-sub">${window.DB.proyectos.filter(p=>p.estado==='en_curso').length} en curso</div></div>
+    <div class="kpi teal"><div class="kpi-lbl">Desarrollos</div><div class="kpi-val">${window.DB.desarrollos.length}</div><div class="kpi-sub">${window.DB.desarrollos.filter(d=>d.estado==='en_curso').length} en curso</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Acciones vencidas</div><div class="kpi-val">${vencidas}</div><div class="kpi-sub">${proximas} próximas a vencer</div></div>
+    <div class="kpi green"><div class="kpi-lbl">Completados</div><div class="kpi-val">${allProj.filter(i=>i.estado==='completado').length}</div><div class="kpi-sub">de ${allProj.length} total</div></div>`;
+  const renderMini=(arr,el)=>{
+    if(!arr.length){el.innerHTML='<div class="empty">Sin datos</div>';return;}
+    el.innerHTML=arr.map(i=>`<div class="proj-row" onclick="openDetailFromDash('${i.id}')">
+      <span class="proj-num">${i.num}</span>
+      <div class="proj-info"><div class="proj-name">${i.nombre}</div><div class="proj-meta">${i.tipo}</div></div>
+      ${estadoBadge(i.estado)}
+      <div class="proj-progress"><div class="prog-label"><span>PG</span><span>${i.pg}%</span></div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${i.pg}%;background:${progColor(i.pg)}"></div></div></div>
+    </div>`).join('');
+  };
+  renderMini(window.DB.proyectos, document.getElementById('dash-proy'));
+  renderMini(window.DB.desarrollos, document.getElementById('dash-dev'));
+  const urgentes=allActions.filter(x=>!x.action.done&&(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon'))
+    .sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1).slice(0,8);
+  const dv=document.getElementById('dash-venc');
+  if(!urgentes.length){dv.innerHTML='<div class="empty">No hay acciones vencidas o próximas</div>';return;}
+  dv.innerHTML=urgentes.map(({action:a,item:i})=>{
+    const st=dateStatus(a.date);
+    return `<div class="overdue-item"><span class="action-date-tag ${st}">📅 ${fmtDate(a.date)}</span>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">${a.text}</div>
+    <div style="font-size:10px;color:var(--muted)">${i.nombre}${a.responsable?' · '+a.responsable:''}</div></div>
+    ${estadoBadge(a.estado)}</div>`;
+  }).join('');
+}
+window.renderDashboard=renderDashboard;
+
+// ── LIST ──────────────────────────────────────────────────────────────────
+function renderList(key){
+  if(!window.DB) return;
+  const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;
+  const flt=key==='proy'?filterProy:filterDev;
+  const estados=['todos','en_curso','pendiente','completado','bloqueado'];
+  const labels={todos:'Todos',en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};
+  document.getElementById('flt-'+key).innerHTML=estados.map(e=>
+    `<button class="flt ${flt===e?'on':''}" onclick="setFilter('${key}','${e}')">${labels[e]} (${e==='todos'?arr.length:arr.filter(i=>i.estado===e).length})</button>`
+  ).join('');
+  const filtered=flt==='todos'?arr:arr.filter(i=>i.estado===flt);
+  const listEl=document.getElementById('list-'+key);
+  if(!filtered.length){listEl.innerHTML='<div class="empty">Sin elementos</div>';return;}
+  listEl.innerHTML=filtered.map(item=>{
+    const pendActs=flatActions([item]).filter(x=>!x.action.done&&(dateStatus(x.action.date)==='overdue'||dateStatus(x.action.date)==='soon')).length;
+    return `<div class="proj-row" onclick="openDetail('${key}','${item.id}')">
+      <span class="proj-num">${item.num}</span>
+      <div class="proj-info"><div class="proj-name">${item.nombre}</div><div class="proj-meta">${item.tipo} · ${(item.actions||[]).length} acciones</div></div>
+      ${estadoBadge(item.estado)}
+      <div class="proj-progress"><div class="prog-label"><span>PG</span><span>${item.pg}%</span></div>
+      <div class="prog-bg"><div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"></div></div></div>
+      ${pendActs>0?`<span class="badge amber">⚠ ${pendActs}</span>`:''}
+    </div>`;
+  }).join('');
+}
+window.setFilter=function(key,val){ if(key==='proy') filterProy=val; else filterDev=val; renderList(key); }
+
+// ── DETAIL ────────────────────────────────────────────────────────────────
+let currentDetail={key:null,id:null};
+window.openDetail=function(key,id){
+  currentDetail={key,id};
+  document.getElementById('list-'+key).style.display='none';
+  document.getElementById('flt-'+key).style.display='none';
+  document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='none';
+  document.getElementById('detail-'+key).classList.add('open');
+  renderDetail(key,id);
+}
+window.closeDetail=function(key){
+  document.getElementById('list-'+key).style.display='';
+  document.getElementById('flt-'+key).style.display='';
+  document.querySelector('#view-'+{proy:'proyectos',dev:'desarrollos'}[key]+' .sec-head').style.display='';
+  document.getElementById('detail-'+key).classList.remove('open');
+  renderList(key);
+}
+function renderDetail(key,id){
+  const arr=key==='proy'?window.DB.proyectos:window.DB.desarrollos;
+  const item=arr.find(x=>x.id===id); if(!item) return;
+  const label2=key==='proy'?'Instalación':'Pruebas';
+  document.getElementById('detail-'+key+'-body').innerHTML=`
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-head"><h2>${item.nombre}</h2>${estadoBadge(item.estado)}
+        <button class="btn sm" onclick="openEditItemModal('${key}','${id}')">✏️ Editar</button></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:14px">
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Tipo</div><div style="font-size:12px">${item.tipo}</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Proyecto General</div>
+          <div class="prog-bg" style="margin-top:6px"><div class="prog-fill" style="width:${item.pg}%;background:${progColor(item.pg)}"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${item.pg}%</div></div>
+        <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">${label2}</div>
+          <div class="prog-bg" style="margin-top:6px"><div class="prog-fill" style="width:${item.inst}%;background:${progColor(item.inst)}"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${item.inst}%</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Acciones</h2>
+        <button class="btn sm primary" onclick="addRootAction('${key}','${id}')">+ Nueva acción</button></div>
+      <div class="action-tree" id="tree-${id}"></div>
+    </div>`;
+  renderTree(item);
+}
+window.openDetailFromDash=function(id){
+  const isProy=window.DB.proyectos.find(p=>p.id===id);
+  if(isProy){ showView('proyectos',document.getElementById('nav-proyectos')); openDetail('proy',id); }
+  else { showView('desarrollos',document.getElementById('nav-desarrollos')); openDetail('dev',id); }
+}
+
+// ── TREE ──────────────────────────────────────────────────────────────────
+const expandState={};
+function renderTree(item){
+  const el=document.getElementById('tree-'+item.id); if(!el) return;
+  if(!(item.actions||[]).length){el.innerHTML='<div class="empty">Sin acciones. Agregá la primera.</div>';return;}
+  el.innerHTML=renderNodes(item.actions,item);
+}
+function renderNodes(actions,item){ return actions.map(a=>renderNode(a,item)).join(''); }
+function renderNode(a,item){
+  const hasChildren=a.children&&a.children.length>0;
+  const isOpen=expandState[a.id]!==false;
+  const st=dateStatus(a.date);
+  const dtClass=st==='overdue'?'overdue':st==='soon'?'soon':'';
+  const stateColors={pendiente:'var(--hint)',en_curso:'var(--blue)',completado:'var(--green)',bloqueado:'var(--red)'};
+  return `<div class="action-node">
+    <div class="action-row" style="border-left:2.5px solid ${stateColors[a.estado]||'var(--hint)'}">
+      <button class="action-toggle" onclick="toggleExpand('${a.id}','${item.id}')" ${!hasChildren?'style="visibility:hidden"':''}>${hasChildren&&isOpen?'▾':'▸'}</button>
+      <input type="checkbox" class="action-check" ${a.done?'checked':''} onchange="toggleDone('${a.id}','${item.id}')">
+      <div class="action-content">
+        <div class="action-text ${a.done?'done':''}">${a.text}</div>
+        <div class="action-dates">
+          ${a.date?`<span class="action-date-tag ${dtClass}">📅 Revisión: ${fmtDate(a.date)}</span>`:`<span class="action-date-tag" style="cursor:pointer" onclick="openEditActionModal('${a.id}','${item.id}')">+ Agregar fecha</span>`}
+          ${a.responsable?`<span class="action-date-tag">👤 ${a.responsable}</span>`:''}
+        </div>
+      </div>
+      <div class="action-row-btns">
+        <button class="btn ghost sm" onclick="openEditActionModal('${a.id}','${item.id}')">✏️ Editar</button>
+        <button class="btn ghost sm" onclick="showAddChildForm('${a.id}','${item.id}')">+ Sub-acción</button>
+        <button class="btn ghost sm" style="color:var(--red)" onclick="deleteAction('${a.id}','${item.id}')">🗑 Borrar</button>
+      </div>
+    </div>
+    <div id="addform-${a.id}" style="display:none;padding-left:22px;margin-top:3px"></div>
+    ${hasChildren&&isOpen?`<div class="action-indent">${renderNodes(a.children,item)}</div>`:''}
+  </div>`;
+}
+
+window.toggleExpand=function(aid,itemId){ expandState[aid]=expandState[aid]===false?true:false; rerenderTree(itemId); }
+window.toggleDone=function(aid,itemId){
+  const item=findItem(itemId); const a=findAction(item.actions,aid);
+  if(a){ a.done=!a.done; rerenderTree(itemId); window.saveDB(); }
+}
+function rerenderTree(itemId){ const item=findItem(itemId); if(item) renderTree(item); }
+function findItem(id){ return [...(window.DB.proyectos||[]),...(window.DB.desarrollos||[])].find(x=>x.id===id); }
+function findAction(actions,id){
+  for(const a of actions){
+    if(a.id===id) return a;
+    if(a.children){ const f=findAction(a.children,id); if(f) return f; }
+  }
+  return null;
+}
+function findParentArr(actions,id){
+  for(const a of actions){
+    if(a.children){
+      if(a.children.find(c=>c.id===id)) return a.children;
+      const f=findParentArr(a.children,id); if(f) return f;
+    }
+  }
+  return null;
+}
+
+window.addRootAction=function(key,itemId){
+  const item=findItem(itemId); if(!item) return;
+  const na=makeAction('Nueva acción');
+  item.actions.push(na);
+  rerenderTree(itemId);
+  openEditActionModal(na.id,itemId);
+}
+window.showAddChildForm=function(parentId,itemId){
+  const el=document.getElementById('addform-'+parentId); if(!el) return;
+  if(el.style.display!=='none'){el.style.display='none';el.innerHTML='';return;}
+  el.style.display='block';
+  el.innerHTML=`<div class="add-action-row">
+    <input class="add-action-input" id="child-txt-${parentId}" placeholder="Descripción de la sub-acción…" onkeydown="if(event.key==='Enter')saveChildAction('${parentId}','${itemId}')">
+    <input class="add-action-date" type="date" id="child-date-${parentId}">
+    <button class="btn sm primary" onclick="saveChildAction('${parentId}','${itemId}')">Agregar</button>
+    <button class="btn sm" onclick="document.getElementById('addform-${parentId}').style.display='none'">✕</button>
+  </div>`;
+  document.getElementById('child-txt-'+parentId).focus();
+}
+window.saveChildAction=function(parentId,itemId){
+  const txt=document.getElementById('child-txt-'+parentId)?.value.trim(); if(!txt) return;
+  const date=document.getElementById('child-date-'+parentId)?.value||'';
+  const item=findItem(itemId); const parent=findAction(item.actions,parentId);
+  if(!parent) return;
+  if(!parent.children) parent.children=[];
+  expandState[parentId]=true;
+  parent.children.push(makeAction(txt,date));
+  document.getElementById('addform-'+parentId).style.display='none';
+  rerenderTree(itemId); window.saveDB();
+}
+window.deleteAction=function(aid,itemId){
+  if(!confirm('¿Eliminar esta acción y todas sus sub-acciones?')) return;
+  const item=findItem(itemId);
+  const parentArr=findParentArr(item.actions,aid)||item.actions;
+  const idx=parentArr.findIndex(a=>a.id===aid);
+  if(idx>-1){ parentArr.splice(idx,1); rerenderTree(itemId); window.saveDB(); }
+}
+
+let editActionCtx={aid:null,itemId:null};
+window.openEditActionModal=function(aid,itemId){
+  editActionCtx={aid,itemId};
+  const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;
+  document.getElementById('ea-text').value=a.text;
+  document.getElementById('ea-date').value=a.date||'';
+  document.getElementById('ea-estado').value=a.estado||'pendiente';
+  document.getElementById('ea-resp').value=a.responsable||'';
+  document.getElementById('modal-action').classList.add('open');
+}
+window.closeModalAction=function(){ document.getElementById('modal-action').classList.remove('open'); }
+window.saveEditAction=function(){
+  const {aid,itemId}=editActionCtx;
+  const item=findItem(itemId); const a=findAction(item.actions,aid); if(!a) return;
+  a.text=document.getElementById('ea-text').value.trim()||a.text;
+  a.date=document.getElementById('ea-date').value;
+  a.estado=document.getElementById('ea-estado').value;
+  a.responsable=document.getElementById('ea-resp').value;
+  closeModalAction(); rerenderTree(itemId); window.saveDB();
+}
+
+// ── VENCIMIENTOS ──────────────────────────────────────────────────────────
+function renderVencimientos(){
+  if(!window.DB) return;
+  const allActions=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=>x.action.date&&!x.action.done);
+  const filters=['todos','overdue','soon','ok'];
+  const labels={todos:'Todos',overdue:'Vencidos',soon:'Esta semana',ok:'Futuros'};
+  document.getElementById('flt-venc').innerHTML=filters.map(f=>
+    `<button class="flt ${filterVenc===f?'on':''}" onclick="setFilterVenc('${f}')">${labels[f]} (${f==='todos'?allActions.length:allActions.filter(x=>dateStatus(x.action.date)===f).length})</button>`
+  ).join('');
+  const filtered=filterVenc==='todos'?allActions:allActions.filter(x=>dateStatus(x.action.date)===filterVenc);
+  filtered.sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1);
+  const el=document.getElementById('list-venc');
+  if(!filtered.length){el.innerHTML='<div class="empty">Sin acciones con fecha en esta vista</div>';return;}
+  el.innerHTML=filtered.map(({action:a,item:i})=>{
+    const st=dateStatus(a.date);
+    return `<div class="overdue-item" style="cursor:pointer" onclick="openDetailFromDash('${i.id}')">
+      <span class="action-date-tag ${st}">📅 ${fmtDate(a.date)}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500">${a.text}</div>
+      <div style="font-size:10px;color:var(--muted)">${i.nombre}${a.responsable?' · '+a.responsable:''}</div></div>
+      ${estadoBadge(a.estado)}
+    </div>`;
+  }).join('');
+}
+window.setFilterVenc=function(v){ filterVenc=v; renderVencimientos(); }
+
+// ── NEW/EDIT ITEM ─────────────────────────────────────────────────────────
+let newItemCtx={type:null,editId:null};
+window.openNewItemModal=function(type){ newItemCtx={type,editId:null}; document.getElementById('modal-item-title').textContent=type==='proyecto'?'Nuevo proyecto':'Nuevo desarrollo'; buildItemBody(type,null); document.getElementById('modal-item').classList.add('open'); }
+window.openEditItemModal=function(key,id){ const item=findItem(id); if(!item) return; newItemCtx={type:key==='proy'?'proyecto':'desarrollo',editId:id}; document.getElementById('modal-item-title').textContent='Editar'; buildItemBody(newItemCtx.type,item); document.getElementById('modal-item').classList.add('open'); }
+function buildItemBody(type,item){
+  const label2=type==='proyecto'?'Instalación':'Pruebas industriales';
+  document.getElementById('modal-item-body').innerHTML=`
+    <div class="field"><label>Nombre</label><input type="text" id="fi-nombre" value="${item?item.nombre:''}"></div>
+    <div class="field-row">
+      <div class="field"><label>Tipo</label><input type="text" id="fi-tipo" value="${item?item.tipo:''}" placeholder="ej: Compra, Traslado…"></div>
+      <div class="field"><label>Estado</label><select id="fi-estado">
+        <option value="en_curso" ${item?.estado==='en_curso'?'selected':''}>En curso</option>
+        <option value="pendiente" ${item?.estado==='pendiente'?'selected':''}>Pendiente</option>
+        <option value="completado" ${item?.estado==='completado'?'selected':''}>Completado</option>
+        <option value="bloqueado" ${item?.estado==='bloqueado'?'selected':''}>Bloqueado</option>
+      </select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>% Proyecto General</label><input type="number" id="fi-pg" value="${item?item.pg:0}" min="0" max="100"></div>
+      <div class="field"><label>% ${label2}</label><input type="number" id="fi-inst" value="${item?item.inst:0}" min="0" max="100"></div>
+    </div>`;
+}
+window.closeModalItem=function(){ document.getElementById('modal-item').classList.remove('open'); }
+window.saveNewItem=function(){
+  const nombre=document.getElementById('fi-nombre').value.trim(); if(!nombre){alert('Ingresá el nombre');return;}
+  const tipo=document.getElementById('fi-tipo').value;
+  const estado=document.getElementById('fi-estado').value;
+  const pg=parseInt(document.getElementById('fi-pg').value)||0;
+  const inst=parseInt(document.getElementById('fi-inst').value)||0;
+  const {type,editId}=newItemCtx;
+  const arr=type==='proyecto'?window.DB.proyectos:window.DB.desarrollos;
+  if(editId){
+    const item=arr.find(x=>x.id===editId);
+    if(item) Object.assign(item,{nombre,tipo,estado,pg,inst});
+    closeModalItem();
+    const key=type==='proyecto'?'proy':'dev';
+    renderDetail(key,editId);
+  } else {
+    const nums=arr.map(x=>x.num); const num=nums.length?Math.max(...nums)+1:1;
+    arr.push({id:uid(),num,nombre,tipo,estado,pg,inst,actions:[]});
+    closeModalItem();
+    renderList(type==='proyecto'?'proy':'dev');
+  }
+  window.saveDB();
+}
+
+// ── EXPORT EXCEL ──────────────────────────────────────────────────────────
+window.exportExcel=function(){
+  if(typeof XLSX==='undefined'){alert('Cargando librería, intentá en segundos...');return;}
+  if(!window.DB){alert('Sin datos');return;}
+  const wb=XLSX.utils.book_new();
+  const elbl={en_curso:'En curso',pendiente:'Pendiente',completado:'Completado',bloqueado:'Bloqueado'};
+  function walkRows(actions,item,rows,depth){
+    actions.forEach(a=>{
+      const prefix='  '.repeat(depth)+(depth>0?'↳ ':'');
+      rows.push([depth===0?item.num:'',depth===0?item.nombre:'',depth===0?item.tipo:'',depth===0?(elbl[item.estado]||item.estado):'',depth===0?item.pg+'%':'',depth===0?item.inst+'%':'','Nivel '+(depth+1),prefix+a.text,elbl[a.estado]||a.estado||'',a.date?fmtDate(a.date):'',a.responsable||'',a.done?'Sí':'No']);
+      if(a.children&&a.children.length) walkRows(a.children,item,rows,depth+1);
+    });
+  }
+  const hdr=['#','Nombre','Tipo','Estado','% PG','% Inst/Pruebas','Nivel','Acción','Estado acción','Fecha revisión','Responsable','Completada'];
+  const rp=[hdr]; window.DB.proyectos.forEach(i=>{ if(!i.actions.length) rp.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rp,0); });
+  const wp=XLSX.utils.aoa_to_sheet(rp); wp['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wp,'Proyectos');
+  const rd=[hdr]; window.DB.desarrollos.forEach(i=>{ if(!i.actions.length) rd.push([i.num,i.nombre,i.tipo,elbl[i.estado]||i.estado,i.pg+'%',i.inst+'%','','','','','','']); else walkRows(i.actions,i,rd,0); });
+  const wd=XLSX.utils.aoa_to_sheet(rd); wd['!cols']=[4,30,16,12,8,8,8,52,12,14,16,10].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wd,'Desarrollos');
+  const allF=flatActions([...window.DB.proyectos,...window.DB.desarrollos]).filter(x=>x.action.date);
+  allF.sort((a,b)=>(a.action.date||'9999')>(b.action.date||'9999')?1:-1);
+  const rv=[['Proyecto/Desarrollo','Tipo','Acción','Estado','Fecha revisión','Responsable','Completada','Alerta']];
+  allF.forEach(({action:a,item:i})=>{ const st=dateStatus(a.date); rv.push([i.nombre,i.tipo,a.text,elbl[a.estado]||a.estado||'',fmtDate(a.date),a.responsable||'',a.done?'Sí':'No',st==='overdue'?'VENCIDA':st==='soon'?'Esta semana':'OK']); });
+  const wv=XLSX.utils.aoa_to_sheet(rv); wv['!cols']=[30,16,52,12,14,16,10,12].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,wv,'Vencimientos');
+  const allI=[...window.DB.proyectos,...window.DB.desarrollos]; const allA=flatActions(allI);
+  const rr=[['RESUMEN – Proyectos I&D / PROYECTOS I&D 2026'],['Exportado:',new Date().toLocaleDateString('es-AR')],[],['ÍTEM','VALOR'],['Proyectos activos',window.DB.proyectos.length],['Desarrollos activos',window.DB.desarrollos.length],['Total',allI.length],['En curso',allI.filter(i=>i.estado==='en_curso').length],['Completados',allI.filter(i=>i.estado==='completado').length],['Pendientes/Bloqueados',allI.filter(i=>i.estado==='pendiente'||i.estado==='bloqueado').length],[],['Total acciones',allA.length],['Completadas',allA.filter(x=>x.action.done).length],['Con fecha de revisión',allA.filter(x=>x.action.date).length],['Vencidas',allA.filter(x=>!x.action.done&&dateStatus(x.action.date)==='overdue').length],['Próximas (7 días)',allA.filter(x=>!x.action.done&&dateStatus(x.action.date)==='soon').length]];
+  const wr=XLSX.utils.aoa_to_sheet(rr); wr['!cols']=[{wch:32},{wch:16}]; XLSX.utils.book_append_sheet(wb,wr,'Resumen');
+  XLSX.writeFile(wb,'ProyectosID_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+</script>
+</body>
+</html>
